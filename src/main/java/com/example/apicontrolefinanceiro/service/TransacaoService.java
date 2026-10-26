@@ -4,6 +4,8 @@ import com.example.apicontrolefinanceiro.model.Transacao;
 import com.example.apicontrolefinanceiro.repository.TransacaoRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TransacaoService {
 
@@ -17,5 +19,10 @@ public class TransacaoService {
     public Transacao salvar(Transacao transacao){
 
         return transacaoRepository.save(transacao);
+    }
+
+    public List<Transacao> listar(){
+
+        return transacaoRepository.findAll();
     }
 }
