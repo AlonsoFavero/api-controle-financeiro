@@ -5,6 +5,7 @@ import com.example.apicontrolefinanceiro.repository.TransacaoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TransacaoService {
@@ -24,5 +25,10 @@ public class TransacaoService {
     public List<Transacao> listar(){
 
         return transacaoRepository.findAll();
+    }
+
+    public Optional<Transacao> buscarPorId(Long id){
+
+        return transacaoRepository.findById(id);
     }
 }
