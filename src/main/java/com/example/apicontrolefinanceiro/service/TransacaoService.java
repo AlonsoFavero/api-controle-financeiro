@@ -31,4 +31,9 @@ public class TransacaoService {
 
         return transacaoRepository.findById(id);
     }
+
+    public void excluirPorId(Long id){
+
+        transacaoRepository.deleteById(id);
+    }
 }
