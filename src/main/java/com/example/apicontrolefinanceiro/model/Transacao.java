@@ -21,8 +21,8 @@ public class Transacao {
     @NotNull
     @Positive
     private BigDecimal valor;
-    @NotBlank
-    private String tipo;
+    @NotNull
+    private TipoTransacao tipo;
     @NotNull
     private LocalDate data;
 
@@ -62,11 +62,11 @@ public class Transacao {
         this.data = data;
     }
 
-    public String getTipo() {
+    public TipoTransacao getTipo() {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(TipoTransacao tipo) {
         this.tipo = tipo;
     }
 }
