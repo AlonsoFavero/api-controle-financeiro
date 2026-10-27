@@ -39,4 +39,10 @@ public class TransacaoController {
                .orElseThrow(() ->
                        new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
+
+    @DeleteMapping("/{id}")
+    public void excluirPorId(@PathVariable Long id){
+
+         transacaoService.excluirPorId(id);
+    }
 }
