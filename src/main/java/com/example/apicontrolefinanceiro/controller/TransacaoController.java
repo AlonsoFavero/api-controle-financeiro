@@ -2,10 +2,9 @@ package com.example.apicontrolefinanceiro.controller;
 
 import com.example.apicontrolefinanceiro.model.Transacao;
 import com.example.apicontrolefinanceiro.service.TransacaoService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/transacoes")
@@ -22,5 +21,11 @@ public class TransacaoController {
     public Transacao salvar(@RequestBody Transacao transacao){
 
       return transacaoService.salvar(transacao);
+    }
+
+    @GetMapping
+    public List<Transacao> listar(){
+
+        return transacaoService.listar();
     }
 }
