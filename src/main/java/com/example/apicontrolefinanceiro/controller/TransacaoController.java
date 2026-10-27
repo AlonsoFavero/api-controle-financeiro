@@ -45,4 +45,10 @@ public class TransacaoController {
 
          transacaoService.excluirPorId(id);
     }
+
+    @PutMapping("/{id}")
+    public Transacao atualizar(@PathVariable Long id, @RequestBody Transacao novosDados){
+
+        return transacaoService.atualizar(id,novosDados);
+    }
 }
