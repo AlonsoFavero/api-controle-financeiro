@@ -28,9 +28,12 @@ public class TransacaoController {
     }
 
     @GetMapping
-    public List<Transacao> listar(){
+    public List<TransacaoResponseDTO> listar(){
 
-        return transacaoService.listar();
+       return transacaoService.listar()
+               .stream()
+               .map(transacao -> new TransacaoResponseDTO(transacao))
+               .toList();
     }
 
     @GetMapping("/{id}")
