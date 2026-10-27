@@ -2,12 +2,12 @@ package com.example.apicontrolefinanceiro.controller;
 
 import com.example.apicontrolefinanceiro.model.Transacao;
 import com.example.apicontrolefinanceiro.service.TransacaoService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/transacoes")
@@ -21,7 +21,7 @@ public class TransacaoController {
     }
 
     @PostMapping
-    public Transacao salvar(@RequestBody Transacao transacao){
+    public Transacao salvar(@Valid @RequestBody Transacao transacao){
 
       return transacaoService.salvar(transacao);
     }
@@ -47,7 +47,7 @@ public class TransacaoController {
     }
 
     @PutMapping("/{id}")
-    public Transacao atualizar(@PathVariable Long id, @RequestBody Transacao novosDados){
+    public Transacao atualizar(@PathVariable Long id, @Valid @RequestBody Transacao novosDados){
 
         return transacaoService.atualizar(id,novosDados);
     }
