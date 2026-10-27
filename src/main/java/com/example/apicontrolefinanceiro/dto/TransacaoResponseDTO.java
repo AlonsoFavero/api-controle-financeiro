@@ -22,4 +22,24 @@ public class TransacaoResponseDTO {
         this.tipo = transacao.getTipo();
         this.valor = transacao.getValor();
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public BigDecimal getValor() {
+        return valor;
+    }
+
+    public LocalDate getData() {
+        return data;
+    }
+
+    public TipoTransacao getTipo() {
+        return tipo;
+    }
 }
