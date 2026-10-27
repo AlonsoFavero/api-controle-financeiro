@@ -1,5 +1,6 @@
 package com.example.apicontrolefinanceiro.controller;
 
+import com.example.apicontrolefinanceiro.dto.TransacaoResponseDTO;
 import com.example.apicontrolefinanceiro.model.Transacao;
 import com.example.apicontrolefinanceiro.service.TransacaoService;
 import jakarta.validation.Valid;
@@ -21,9 +22,9 @@ public class TransacaoController {
     }
 
     @PostMapping
-    public Transacao salvar(@Valid @RequestBody Transacao transacao){
+    public TransacaoResponseDTO salvar(@Valid @RequestBody Transacao transacao){
 
-      return transacaoService.salvar(transacao);
+        return new TransacaoResponseDTO(transacaoService.salvar(transacao));
     }
 
     @GetMapping
