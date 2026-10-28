@@ -37,9 +37,10 @@ public class TransacaoController {
     }
 
     @GetMapping("/{id}")
-    public Transacao buscarPorId(@PathVariable Long id){
+    public TransacaoResponseDTO buscarPorId(@PathVariable Long id){
 
        return transacaoService.buscarPorId(id)
+               .map(transacao -> new TransacaoResponseDTO(transacao))
                .orElseThrow(() ->
                        new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
