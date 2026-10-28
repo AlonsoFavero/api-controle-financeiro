@@ -25,12 +25,7 @@ public class TransacaoController {
     @PostMapping
     public TransacaoResponseDTO salvar(@Valid @RequestBody TransacaoRequestDTO dados){
 
-        Transacao transacao = new Transacao();
-
-        transacao.setDescricao(dados.getDescricao());
-        transacao.setValor(dados.getValor());
-        transacao.setTipo(dados.getTipo());
-        transacao.setData(dados.getData());
+        Transacao transacao = converterParaEntidade(dados);
 
         return new TransacaoResponseDTO(transacaoService.salvar(transacao));
     }
@@ -63,6 +58,13 @@ public class TransacaoController {
     @PutMapping("/{id}")
     public TransacaoResponseDTO atualizar(@PathVariable Long id, @Valid @RequestBody TransacaoRequestDTO dados){
 
+        Transacao transacao = converterParaEntidade(dados);
+
+        return new TransacaoResponseDTO( transacaoService.atualizar(id,transacao));
+    }
+
+    public Transacao converterParaEntidade( TransacaoRequestDTO dados){
+
         Transacao transacao = new Transacao();
 
         transacao.setDescricao(dados.getDescricao());
@@ -70,6 +72,6 @@ public class TransacaoController {
         transacao.setTipo(dados.getTipo());
         transacao.setData(dados.getData());
 
-        return new TransacaoResponseDTO( transacaoService.atualizar(id,transacao));
+        return transacao;
     }
 }
