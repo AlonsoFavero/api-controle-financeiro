@@ -46,6 +46,7 @@ public class TransacaoController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void excluirPorId(@PathVariable Long id){
 
          transacaoService.excluirPorId(id);
