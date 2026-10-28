@@ -61,8 +61,15 @@ public class TransacaoController {
     }
 
     @PutMapping("/{id}")
-    public TransacaoResponseDTO atualizar(@PathVariable Long id, @Valid @RequestBody Transacao novosDados){
+    public TransacaoResponseDTO atualizar(@PathVariable Long id, @Valid @RequestBody TransacaoRequestDTO dados){
 
-        return new TransacaoResponseDTO( transacaoService.atualizar(id,novosDados));
+        Transacao transacao = new Transacao();
+
+        transacao.setDescricao(dados.getDescricao());
+        transacao.setValor(dados.getValor());
+        transacao.setTipo(dados.getTipo());
+        transacao.setData(dados.getData());
+
+        return new TransacaoResponseDTO( transacaoService.atualizar(id,transacao));
     }
 }
