@@ -1,5 +1,6 @@
 package com.example.apicontrolefinanceiro.controller;
 
+import com.example.apicontrolefinanceiro.dto.TransacaoRequestDTO;
 import com.example.apicontrolefinanceiro.dto.TransacaoResponseDTO;
 import com.example.apicontrolefinanceiro.model.Transacao;
 import com.example.apicontrolefinanceiro.service.TransacaoService;
@@ -22,7 +23,14 @@ public class TransacaoController {
     }
 
     @PostMapping
-    public TransacaoResponseDTO salvar(@Valid @RequestBody Transacao transacao){
+    public TransacaoResponseDTO salvar(@Valid @RequestBody TransacaoRequestDTO dados){
+
+        Transacao transacao = new Transacao();
+
+        transacao.setDescricao(dados.getDescricao());
+        transacao.setValor(dados.getValor());
+        transacao.setTipo(dados.getTipo());
+        transacao.setData(dados.getData());
 
         return new TransacaoResponseDTO(transacaoService.salvar(transacao));
     }
