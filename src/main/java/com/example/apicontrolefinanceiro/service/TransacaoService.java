@@ -77,4 +77,9 @@ public class TransacaoService {
 
         return saldo;
     }
+
+    public List<Transacao> buscarPorTipo(TipoTransacao tipo){
+
+       return transacaoRepository.findByTipo(tipo);
+    }
 }
