@@ -82,4 +82,34 @@ public class TransacaoService {
 
        return transacaoRepository.findByTipo(tipo);
     }
+
+    public BigDecimal calcularTotalReceitas() {
+
+        BigDecimal saldo = BigDecimal.ZERO;
+
+        for (Transacao transacao : listar()) {
+
+            if (transacao.getTipo() == TipoTransacao.RECEITA) {
+
+                saldo = saldo.add(transacao.getValor());
+            }
+
+        }
+        return saldo;
+    }
+
+    public BigDecimal calcularTotalDespesas(){
+
+        BigDecimal saldo = BigDecimal.ZERO;
+
+        for (Transacao transacao : listar()) {
+
+            if (transacao.getTipo() == TipoTransacao.DESPESA) {
+
+                saldo = saldo.add(transacao.getValor());
+            }
+
+        }
+        return saldo;
+    }
 }
