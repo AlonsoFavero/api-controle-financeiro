@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -73,5 +74,11 @@ public class TransacaoController {
         transacao.setData(dados.getData());
 
         return transacao;
+    }
+
+    @GetMapping("/saldo")
+    public BigDecimal calculaSaldo (){
+
+       return transacaoService.calcularSaldo();
     }
 }
