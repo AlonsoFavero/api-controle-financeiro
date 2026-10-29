@@ -91,4 +91,16 @@ public class TransacaoController {
                 .map(transacao -> new TransacaoResponseDTO(transacao))
                 .toList();
     }
+
+    @GetMapping("/receitas/total")
+    public BigDecimal calcularReceitas(){
+
+       return transacaoService.calcularTotalReceitas();
+    }
+
+    @GetMapping("/despesas/total")
+    public BigDecimal calcularDespesas(){
+
+        return transacaoService.calcularTotalDespesas();
+    }
 }
