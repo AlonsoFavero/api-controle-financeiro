@@ -1,11 +1,13 @@
 package com.example.apicontrolefinanceiro.service;
 
+import com.example.apicontrolefinanceiro.model.TipoTransacao;
 import com.example.apicontrolefinanceiro.model.Transacao;
 import com.example.apicontrolefinanceiro.repository.TransacaoRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,5 +57,24 @@ public class TransacaoService {
         transacao.setValor(novosDados.getValor());
 
        return transacaoRepository.save(transacao);
+    }
+
+    public BigDecimal calcularSaldo(){
+
+        BigDecimal saldo = BigDecimal.ZERO;
+
+        for(Transacao transacao: listar() ){
+
+          if(transacao.getTipo() == TipoTransacao.RECEITA){
+
+           saldo = saldo.add(transacao.getValor());
+          }else{
+
+              saldo = saldo.subtract(transacao.getValor());
+          }
+
+        }
+
+        return saldo;
     }
 }
