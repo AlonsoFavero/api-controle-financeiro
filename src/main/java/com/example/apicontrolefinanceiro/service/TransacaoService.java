@@ -36,6 +36,10 @@ public class TransacaoService {
 
     public void excluirPorId(Long id){
 
+         buscarPorId(id)
+                .orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND));
+
         transacaoRepository.deleteById(id);
     }
 
