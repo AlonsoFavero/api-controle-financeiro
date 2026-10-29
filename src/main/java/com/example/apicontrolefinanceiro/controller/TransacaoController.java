@@ -63,7 +63,7 @@ public class TransacaoController {
         return new TransacaoResponseDTO( transacaoService.atualizar(id,transacao));
     }
 
-    public Transacao converterParaEntidade( TransacaoRequestDTO dados){
+    private Transacao converterParaEntidade( TransacaoRequestDTO dados){
 
         Transacao transacao = new Transacao();
 
