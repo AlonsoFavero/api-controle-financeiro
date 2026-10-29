@@ -2,6 +2,7 @@ package com.example.apicontrolefinanceiro.controller;
 
 import com.example.apicontrolefinanceiro.dto.TransacaoRequestDTO;
 import com.example.apicontrolefinanceiro.dto.TransacaoResponseDTO;
+import com.example.apicontrolefinanceiro.model.TipoTransacao;
 import com.example.apicontrolefinanceiro.model.Transacao;
 import com.example.apicontrolefinanceiro.service.TransacaoService;
 import jakarta.validation.Valid;
@@ -80,5 +81,14 @@ public class TransacaoController {
     public BigDecimal calculaSaldo (){
 
        return transacaoService.calcularSaldo();
+    }
+
+    @GetMapping("/tipo/{tipo}")
+    public List<TransacaoResponseDTO> buscarTipo (@PathVariable TipoTransacao tipo){
+
+        return transacaoService.buscarPorTipo(tipo)
+                .stream()
+                .map(transacao -> new TransacaoResponseDTO(transacao))
+                .toList();
     }
 }
