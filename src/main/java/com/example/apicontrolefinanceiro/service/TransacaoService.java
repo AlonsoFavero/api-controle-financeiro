@@ -153,4 +153,12 @@ public class TransacaoService {
         }
         return saldo;
     }
+
+    public BigDecimal calcularSaldoPorPeriodo(LocalDate inicio, LocalDate fim){
+
+        BigDecimal receitas = calcularReceitasPorPeriodo(inicio, fim);
+        BigDecimal despesas = calcularDespesasPorPeriodo(inicio, fim);
+
+        return receitas.subtract(despesas);
+    }
 }
