@@ -123,4 +123,19 @@ public class TransacaoService {
 
        return transacaoRepository.findByDataBetween(inicio, fim);
     }
+
+    public BigDecimal calcularReceitasPorPeriodo(LocalDate inicio, LocalDate fim){
+
+        BigDecimal saldo = BigDecimal.ZERO;
+
+        for (Transacao transacao : buscarPorPeriodo(inicio, fim)) {
+
+            if (transacao.getTipo() == TipoTransacao.RECEITA) {
+
+                saldo = saldo.add(transacao.getValor());
+            }
+
+        }
+        return saldo;
+    }
 }
