@@ -1,5 +1,6 @@
 package com.example.apicontrolefinanceiro.service;
 
+import com.example.apicontrolefinanceiro.dto.ResumoFinanceiroDTO;
 import com.example.apicontrolefinanceiro.model.TipoTransacao;
 import com.example.apicontrolefinanceiro.model.Transacao;
 import com.example.apicontrolefinanceiro.repository.TransacaoRepository;
@@ -160,5 +161,15 @@ public class TransacaoService {
         BigDecimal despesas = calcularDespesasPorPeriodo(inicio, fim);
 
         return receitas.subtract(despesas);
+    }
+
+    public ResumoFinanceiroDTO calcularResumoPorPeriodo(LocalDate inicio, LocalDate fim){
+
+        BigDecimal receitas = calcularReceitasPorPeriodo(inicio, fim);
+        BigDecimal despesas = calcularDespesasPorPeriodo(inicio, fim);
+        BigDecimal saldo = calcularSaldoPorPeriodo(inicio, fim);
+
+
+        return new ResumoFinanceiroDTO(receitas,despesas, saldo);
     }
 }
