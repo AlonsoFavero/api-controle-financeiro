@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -102,5 +103,14 @@ public class TransacaoController {
     public BigDecimal calcularDespesas(){
 
         return transacaoService.calcularTotalDespesas();
+    }
+
+    @GetMapping("/periodo")
+    public List<TransacaoResponseDTO> buscarPeriodo(@RequestParam LocalDate inicio, @RequestParam LocalDate fim){
+
+        return transacaoService.buscarPorPeriodo(inicio, fim)
+                .stream()
+                .map( transacao -> new TransacaoResponseDTO(transacao))
+                .toList();
     }
 }
