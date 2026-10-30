@@ -138,4 +138,19 @@ public class TransacaoService {
         }
         return saldo;
     }
+
+
+    public BigDecimal calcularDespesasPorPeriodo(LocalDate inicio, LocalDate fim) {
+
+        BigDecimal saldo = BigDecimal.ZERO;
+
+        for (Transacao transacao : buscarPorPeriodo(inicio, fim)) {
+
+            if (transacao.getTipo() == TipoTransacao.DESPESA) {
+
+                saldo = saldo.add(transacao.getValor());
+            }
+        }
+        return saldo;
+    }
 }
