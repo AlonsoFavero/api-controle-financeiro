@@ -116,6 +116,11 @@ public class TransacaoService {
 
     public List<Transacao> buscarPorPeriodo(LocalDate inicio, LocalDate fim){
 
+        if(inicio.isAfter(fim)){
+
+          throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
        return transacaoRepository.findByDataBetween(inicio, fim);
     }
 }
