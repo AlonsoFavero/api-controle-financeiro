@@ -172,4 +172,9 @@ public class TransacaoService {
 
         return new ResumoFinanceiroDTO(receitas,despesas, saldo);
     }
+
+    public List<Transacao> listarPorDataDesc(){
+
+        return transacaoRepository.findAllByOrderByDataDesc();
+    }
 }

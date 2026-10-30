@@ -11,4 +11,5 @@ public interface TransacaoRepository extends JpaRepository<Transacao,Long> {
 
     List<Transacao> findByTipo(TipoTransacao tipo);
     List<Transacao> findByDataBetween(LocalDate inicio, LocalDate fim);
+    List<Transacao> findAllByOrderByDataDesc();
 }
