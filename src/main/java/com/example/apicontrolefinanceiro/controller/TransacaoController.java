@@ -1,5 +1,6 @@
 package com.example.apicontrolefinanceiro.controller;
 
+import com.example.apicontrolefinanceiro.dto.ResumoFinanceiroDTO;
 import com.example.apicontrolefinanceiro.dto.TransacaoRequestDTO;
 import com.example.apicontrolefinanceiro.dto.TransacaoResponseDTO;
 import com.example.apicontrolefinanceiro.model.TipoTransacao;
@@ -112,5 +113,11 @@ public class TransacaoController {
                 .stream()
                 .map( transacao -> new TransacaoResponseDTO(transacao))
                 .toList();
+    }
+
+    @GetMapping("/resumo")
+    public ResumoFinanceiroDTO resumirPorPeriodo(@RequestParam LocalDate inicio, LocalDate fim){
+
+        return transacaoService.calcularResumoPorPeriodo(inicio, fim);
     }
 }
