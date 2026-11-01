@@ -129,4 +129,13 @@ public class TransacaoController {
                 .map(transacao -> new TransacaoResponseDTO(transacao))
                 .toList();
     }
+
+    @GetMapping("/valor")
+    public List<TransacaoResponseDTO> buscarPorValor(@RequestParam BigDecimal valorMinimo, @RequestParam BigDecimal valorMaximo){
+
+        return transacaoService.buscarPorFaixaDeValor(valorMinimo, valorMaximo)
+                .stream()
+                .map(transacao -> new TransacaoResponseDTO(transacao))
+                .toList();
+    }
 }

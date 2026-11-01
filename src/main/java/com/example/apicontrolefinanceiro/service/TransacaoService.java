@@ -177,4 +177,14 @@ public class TransacaoService {
 
         return transacaoRepository.findAllByOrderByDataDesc();
     }
+
+    public List<Transacao> buscarPorFaixaDeValor(BigDecimal valorMinimo, BigDecimal valorMaximo){
+
+        if(valorMinimo.compareTo(valorMaximo) > 0){
+
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        return transacaoRepository.findAllByValorBetween(valorMinimo, valorMaximo);
+    }
 }
