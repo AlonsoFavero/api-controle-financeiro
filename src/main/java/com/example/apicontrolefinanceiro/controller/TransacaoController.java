@@ -120,4 +120,13 @@ public class TransacaoController {
 
         return transacaoService.calcularResumoPorPeriodo(inicio, fim);
     }
+
+    @GetMapping("/ordenadas")
+    public List<TransacaoResponseDTO> listarPorData(){
+
+        return transacaoService.listarPorDataDesc()
+                .stream()
+                .map(transacao -> new TransacaoResponseDTO(transacao))
+                .toList();
+    }
 }
