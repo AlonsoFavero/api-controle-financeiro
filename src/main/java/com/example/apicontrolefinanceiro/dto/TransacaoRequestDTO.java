@@ -19,6 +19,8 @@ public class TransacaoRequestDTO {
     private TipoTransacao tipo;
     @NotNull
     private LocalDate data;
+    @NotNull
+    private Long categoriaId;
 
     public String getDescricao() {
         return descricao;
@@ -50,5 +52,13 @@ public class TransacaoRequestDTO {
 
     public void setData(LocalDate data) {
         this.data = data;
+    }
+
+    public Long getCategoriaId() {
+        return categoriaId;
+    }
+
+    public void setCategoriaId(Long categoriaId) {
+        this.categoriaId = categoriaId;
     }
 }
