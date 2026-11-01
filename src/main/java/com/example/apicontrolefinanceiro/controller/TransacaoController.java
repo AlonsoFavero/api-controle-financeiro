@@ -7,6 +7,8 @@ import com.example.apicontrolefinanceiro.model.TipoTransacao;
 import com.example.apicontrolefinanceiro.model.Transacao;
 import com.example.apicontrolefinanceiro.service.TransacaoService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -35,12 +37,10 @@ public class TransacaoController {
     }
 
     @GetMapping
-    public List<TransacaoResponseDTO> listar(){
+    public Page<TransacaoResponseDTO> listar(Pageable pageable){
 
-       return transacaoService.listar()
-               .stream()
-               .map(transacao -> new TransacaoResponseDTO(transacao))
-               .toList();
+       return transacaoService.listarPaginado(pageable)
+               .map(transacao -> new TransacaoResponseDTO(transacao));
     }
 
     @GetMapping("/{id}")

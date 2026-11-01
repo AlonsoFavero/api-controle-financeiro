@@ -4,10 +4,12 @@ import com.example.apicontrolefinanceiro.dto.ResumoFinanceiroDTO;
 import com.example.apicontrolefinanceiro.model.TipoTransacao;
 import com.example.apicontrolefinanceiro.model.Transacao;
 import com.example.apicontrolefinanceiro.repository.TransacaoRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import org.springframework.data.domain.Pageable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -186,5 +188,10 @@ public class TransacaoService {
         }
 
         return transacaoRepository.findAllByValorBetween(valorMinimo, valorMaximo);
+    }
+
+    public Page<Transacao> listarPaginado(Pageable pageable){
+
+        return transacaoRepository.findAll(pageable);
     }
 }
