@@ -63,6 +63,7 @@ public class TransacaoService {
         transacao.setData(novosDados.getData());
         transacao.setTipo(novosDados.getTipo());
         transacao.setValor(novosDados.getValor());
+        transacao.setCategoria(novosDados.getCategoria());
 
         return transacaoRepository.save(transacao);
     }
