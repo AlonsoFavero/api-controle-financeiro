@@ -20,4 +20,9 @@ public class CategoriaService {
 
         return categoriaRepository.findAll();
     }
+
+    public Categoria salvar(Categoria categoria){
+
+        return categoriaRepository.save(categoria);
+    }
 }
