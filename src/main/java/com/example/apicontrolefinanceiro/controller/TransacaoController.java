@@ -3,6 +3,7 @@ package com.example.apicontrolefinanceiro.controller;
 import com.example.apicontrolefinanceiro.dto.ResumoFinanceiroDTO;
 import com.example.apicontrolefinanceiro.dto.TransacaoRequestDTO;
 import com.example.apicontrolefinanceiro.dto.TransacaoResponseDTO;
+import com.example.apicontrolefinanceiro.model.Categoria;
 import com.example.apicontrolefinanceiro.model.TipoTransacao;
 import com.example.apicontrolefinanceiro.model.Transacao;
 import com.example.apicontrolefinanceiro.service.TransacaoService;
@@ -75,6 +76,8 @@ public class TransacaoController {
         transacao.setValor(dados.getValor());
         transacao.setTipo(dados.getTipo());
         transacao.setData(dados.getData());
+        Categoria categoria = transacaoService.buscarCategoriaPorId(dados.getCategoriaId());
+        transacao.setCategoria(categoria);
 
         return transacao;
     }
