@@ -1,7 +1,10 @@
 package com.example.apicontrolefinanceiro.service;
 
+import com.example.apicontrolefinanceiro.model.Categoria;
 import com.example.apicontrolefinanceiro.repository.CategoriaRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CategoriaService {
@@ -11,5 +14,10 @@ public class CategoriaService {
     public CategoriaService(CategoriaRepository categoriaRepository) {
 
         this.categoriaRepository = categoriaRepository;
+    }
+
+    public List<Categoria> listar(){
+
+        return categoriaRepository.findAll();
     }
 }
