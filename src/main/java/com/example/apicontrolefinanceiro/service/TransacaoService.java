@@ -1,6 +1,7 @@
 package com.example.apicontrolefinanceiro.service;
 
 import com.example.apicontrolefinanceiro.dto.ResumoFinanceiroDTO;
+import com.example.apicontrolefinanceiro.model.Categoria;
 import com.example.apicontrolefinanceiro.model.TipoTransacao;
 import com.example.apicontrolefinanceiro.model.Transacao;
 import com.example.apicontrolefinanceiro.repository.CategoriaRepository;
@@ -22,37 +23,37 @@ public class TransacaoService {
     private final TransacaoRepository transacaoRepository;
     private final CategoriaRepository categoriaRepository;
 
-    public TransacaoService(TransacaoRepository transacaoRepository, CategoriaRepository categoriaRepository){
+    public TransacaoService(TransacaoRepository transacaoRepository, CategoriaRepository categoriaRepository) {
 
         this.transacaoRepository = transacaoRepository;
         this.categoriaRepository = categoriaRepository;
     }
 
-    public Transacao salvar(Transacao transacao){
+    public Transacao salvar(Transacao transacao) {
 
         return transacaoRepository.save(transacao);
     }
 
-    public List<Transacao> listar(){
+    public List<Transacao> listar() {
 
         return transacaoRepository.findAll();
     }
 
-    public Optional<Transacao> buscarPorId(Long id){
+    public Optional<Transacao> buscarPorId(Long id) {
 
         return transacaoRepository.findById(id);
     }
 
-    public void excluirPorId(Long id){
+    public void excluirPorId(Long id) {
 
-         buscarPorId(id)
+        buscarPorId(id)
                 .orElseThrow(() ->
                         new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         transacaoRepository.deleteById(id);
     }
 
-    public Transacao atualizar(Long id , Transacao novosDados){
+    public Transacao atualizar(Long id, Transacao novosDados) {
 
         Transacao transacao = buscarPorId(id)
                 .orElseThrow(() ->
@@ -63,31 +64,31 @@ public class TransacaoService {
         transacao.setTipo(novosDados.getTipo());
         transacao.setValor(novosDados.getValor());
 
-       return transacaoRepository.save(transacao);
+        return transacaoRepository.save(transacao);
     }
 
-    public BigDecimal calcularSaldo(){
+    public BigDecimal calcularSaldo() {
 
         BigDecimal saldo = BigDecimal.ZERO;
 
-        for(Transacao transacao: listar() ){
+        for (Transacao transacao : listar()) {
 
-          if(transacao.getTipo() == TipoTransacao.RECEITA){
+            if (transacao.getTipo() == TipoTransacao.RECEITA) {
 
-           saldo = saldo.add(transacao.getValor());
-          }else{
+                saldo = saldo.add(transacao.getValor());
+            } else {
 
-              saldo = saldo.subtract(transacao.getValor());
-          }
+                saldo = saldo.subtract(transacao.getValor());
+            }
 
         }
 
         return saldo;
     }
 
-    public List<Transacao> buscarPorTipo(TipoTransacao tipo){
+    public List<Transacao> buscarPorTipo(TipoTransacao tipo) {
 
-       return transacaoRepository.findByTipo(tipo);
+        return transacaoRepository.findByTipo(tipo);
     }
 
     public BigDecimal calcularTotalReceitas() {
@@ -105,7 +106,7 @@ public class TransacaoService {
         return saldo;
     }
 
-    public BigDecimal calcularTotalDespesas(){
+    public BigDecimal calcularTotalDespesas() {
 
         BigDecimal saldo = BigDecimal.ZERO;
 
@@ -120,17 +121,17 @@ public class TransacaoService {
         return saldo;
     }
 
-    public List<Transacao> buscarPorPeriodo(LocalDate inicio, LocalDate fim){
+    public List<Transacao> buscarPorPeriodo(LocalDate inicio, LocalDate fim) {
 
-        if(inicio.isAfter(fim)){
+        if (inicio.isAfter(fim)) {
 
-          throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
-       return transacaoRepository.findByDataBetween(inicio, fim);
+        return transacaoRepository.findByDataBetween(inicio, fim);
     }
 
-    public BigDecimal calcularReceitasPorPeriodo(LocalDate inicio, LocalDate fim){
+    public BigDecimal calcularReceitasPorPeriodo(LocalDate inicio, LocalDate fim) {
 
         BigDecimal saldo = BigDecimal.ZERO;
 
@@ -160,7 +161,7 @@ public class TransacaoService {
         return saldo;
     }
 
-    public BigDecimal calcularSaldoPorPeriodo(LocalDate inicio, LocalDate fim){
+    public BigDecimal calcularSaldoPorPeriodo(LocalDate inicio, LocalDate fim) {
 
         BigDecimal receitas = calcularReceitasPorPeriodo(inicio, fim);
         BigDecimal despesas = calcularDespesasPorPeriodo(inicio, fim);
@@ -168,24 +169,24 @@ public class TransacaoService {
         return receitas.subtract(despesas);
     }
 
-    public ResumoFinanceiroDTO calcularResumoPorPeriodo(LocalDate inicio, LocalDate fim){
+    public ResumoFinanceiroDTO calcularResumoPorPeriodo(LocalDate inicio, LocalDate fim) {
 
         BigDecimal receitas = calcularReceitasPorPeriodo(inicio, fim);
         BigDecimal despesas = calcularDespesasPorPeriodo(inicio, fim);
         BigDecimal saldo = calcularSaldoPorPeriodo(inicio, fim);
 
 
-        return new ResumoFinanceiroDTO(receitas,despesas, saldo);
+        return new ResumoFinanceiroDTO(receitas, despesas, saldo);
     }
 
-    public List<Transacao> listarPorDataDesc(){
+    public List<Transacao> listarPorDataDesc() {
 
         return transacaoRepository.findAllByOrderByDataDesc();
     }
 
-    public List<Transacao> buscarPorFaixaDeValor(BigDecimal valorMinimo, BigDecimal valorMaximo){
+    public List<Transacao> buscarPorFaixaDeValor(BigDecimal valorMinimo, BigDecimal valorMaximo) {
 
-        if(valorMinimo.compareTo(valorMaximo) > 0){
+        if (valorMinimo.compareTo(valorMaximo) > 0) {
 
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
@@ -193,8 +194,16 @@ public class TransacaoService {
         return transacaoRepository.findAllByValorBetween(valorMinimo, valorMaximo);
     }
 
-    public Page<Transacao> listarPaginado(Pageable pageable){
+    public Page<Transacao> listarPaginado(Pageable pageable) {
 
         return transacaoRepository.findAll(pageable);
+    }
+
+    public Categoria buscarCategoriaPorId(Long id) {
+
+       return categoriaRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND));
+
     }
 }
