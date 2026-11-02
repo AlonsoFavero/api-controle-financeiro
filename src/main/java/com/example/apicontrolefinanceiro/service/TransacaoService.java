@@ -3,6 +3,7 @@ package com.example.apicontrolefinanceiro.service;
 import com.example.apicontrolefinanceiro.dto.ResumoFinanceiroDTO;
 import com.example.apicontrolefinanceiro.model.TipoTransacao;
 import com.example.apicontrolefinanceiro.model.Transacao;
+import com.example.apicontrolefinanceiro.repository.CategoriaRepository;
 import com.example.apicontrolefinanceiro.repository.TransacaoRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -19,10 +20,12 @@ import java.util.Optional;
 public class TransacaoService {
 
     private final TransacaoRepository transacaoRepository;
+    private final CategoriaRepository categoriaRepository;
 
-    public TransacaoService(TransacaoRepository transacaoRepository){
+    public TransacaoService(TransacaoRepository transacaoRepository, CategoriaRepository categoriaRepository){
 
         this.transacaoRepository = transacaoRepository;
+        this.categoriaRepository = categoriaRepository;
     }
 
     public Transacao salvar(Transacao transacao){
