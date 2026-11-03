@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
@@ -53,5 +54,22 @@ public class CategoriaControllerTest {
                                 }
                                 """)
         ).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void deveRetornarDadosDaCategoria() throws Exception{
+
+        mockMvc.perform(
+                post("/categorias")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                \"nome\":\"Transporte\"
+                                }
+                                """)
+        ).andExpect(status().isCreated())
+                .andExpect(content().json("""
+             {"nome":"Transporte"}
+        """));
     }
 }
