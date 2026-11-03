@@ -40,4 +40,18 @@ public class CategoriaControllerTest {
                                 """)
         ).andExpect(status().isCreated());
     }
+
+    @Test
+    void deveRejeitarCategoriaSemNome() throws Exception{
+
+        mockMvc.perform(
+                post("/categorias")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                \"nome\":\"\"
+                                }
+                                """)
+        ).andExpect(status().isBadRequest());
+    }
 }
