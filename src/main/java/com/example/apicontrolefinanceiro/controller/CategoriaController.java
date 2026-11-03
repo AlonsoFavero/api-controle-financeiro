@@ -39,11 +39,18 @@ public class CategoriaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Categoria salvar(@RequestBody @Valid CategoriaRequestDTO dados){
+    public CategoriaResponseDTO salvar(@RequestBody @Valid CategoriaRequestDTO dados){
 
         Categoria categoria = new Categoria();
         categoria.setNome(dados.getNome());
 
-        return categoriaService.salvar(categoria);
+        Categoria categoriaSalva = categoriaService.salvar(categoria);
+
+        CategoriaResponseDTO dto = new CategoriaResponseDTO();
+
+        dto.setId(categoriaSalva.getId());
+        dto.setNome(categoriaSalva.getNome());
+
+        return dto;
     }
 }
