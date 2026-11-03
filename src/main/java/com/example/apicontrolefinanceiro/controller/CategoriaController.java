@@ -3,6 +3,7 @@ package com.example.apicontrolefinanceiro.controller;
 import com.example.apicontrolefinanceiro.dto.CategoriaRequestDTO;
 import com.example.apicontrolefinanceiro.model.Categoria;
 import com.example.apicontrolefinanceiro.service.CategoriaService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class CategoriaController {
     }
 
     @PostMapping
-    public Categoria salvar(@RequestBody CategoriaRequestDTO dados){
+    public Categoria salvar(@RequestBody @Valid CategoriaRequestDTO dados){
 
         Categoria categoria = new Categoria();
         categoria.setNome(dados.getNome());

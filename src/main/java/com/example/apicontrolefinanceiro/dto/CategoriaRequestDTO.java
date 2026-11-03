@@ -1,7 +1,10 @@
 package com.example.apicontrolefinanceiro.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class CategoriaRequestDTO {
 
+    @NotBlank
    private String nome;
 
    public CategoriaRequestDTO(){
