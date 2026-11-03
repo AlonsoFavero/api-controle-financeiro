@@ -4,6 +4,7 @@ import com.example.apicontrolefinanceiro.dto.CategoriaRequestDTO;
 import com.example.apicontrolefinanceiro.model.Categoria;
 import com.example.apicontrolefinanceiro.service.CategoriaService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class CategoriaController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Categoria salvar(@RequestBody @Valid CategoriaRequestDTO dados){
 
         Categoria categoria = new Categoria();
