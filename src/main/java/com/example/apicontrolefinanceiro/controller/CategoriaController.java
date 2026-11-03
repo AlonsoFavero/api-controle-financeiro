@@ -1,10 +1,9 @@
 package com.example.apicontrolefinanceiro.controller;
 
+import com.example.apicontrolefinanceiro.dto.CategoriaRequestDTO;
 import com.example.apicontrolefinanceiro.model.Categoria;
 import com.example.apicontrolefinanceiro.service.CategoriaService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,5 +22,14 @@ public class CategoriaController {
     public List<Categoria> listar(){
 
         return categoriaService.listar();
+    }
+
+    @PostMapping
+    public Categoria salvar(@RequestBody CategoriaRequestDTO dados){
+
+        Categoria categoria = new Categoria();
+        categoria.setNome(dados.getNome());
+
+        return categoriaService.salvar(categoria);
     }
 }
