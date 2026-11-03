@@ -1,6 +1,7 @@
 package com.example.apicontrolefinanceiro.controller;
 
 import com.example.apicontrolefinanceiro.dto.CategoriaRequestDTO;
+import com.example.apicontrolefinanceiro.dto.CategoriaResponseDTO;
 import com.example.apicontrolefinanceiro.model.Categoria;
 import com.example.apicontrolefinanceiro.service.CategoriaService;
 import jakarta.validation.Valid;
@@ -21,9 +22,19 @@ public class CategoriaController {
     }
 
     @GetMapping
-    public List<Categoria> listar(){
+    public List<CategoriaResponseDTO> listar(){
 
-        return categoriaService.listar();
+           return categoriaService.listar()
+                .stream()
+                .map(categoria -> {
+                    CategoriaResponseDTO dto = new CategoriaResponseDTO();
+
+                       dto.setId(categoria.getId());
+                       dto.setNome(categoria.getNome());
+
+                    return dto;
+                        })
+                   .toList();
     }
 
     @PostMapping
