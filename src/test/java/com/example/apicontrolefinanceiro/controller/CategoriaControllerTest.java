@@ -1,11 +1,13 @@
 package com.example.apicontrolefinanceiro.controller;
 
+import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -82,5 +84,30 @@ public class CategoriaControllerTest {
                 .andExpect(content().json("""
              {"nome":"Transporte"}
         """));
+    }
+
+    @Test
+    void deveBuscarCategoriaPorId() throws Exception{
+
+      MvcResult resultado = mockMvc.perform(
+                post("/categorias")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                \"nome\":\"Lazer\"
+                                }
+                                """)
+        ).andExpect(status().isCreated())
+                .andReturn()  ;
+
+        String resposta = resultado.getResponse().getContentAsString();
+        System.out.println(resposta);
+        Number idNumero = JsonPath.read(resposta, "$.id");
+        Long id = idNumero.longValue();
+
+        mockMvc.perform(
+                        get("/categorias/{id}", id)
+                ).andExpect(status().isOk())
+                .andExpect(jsonPath("$.nome").value("Lazer"));
     }
 }
