@@ -141,4 +141,29 @@ public class CategoriaControllerTest {
         ).andExpect(status().isOk())
         .andExpect(jsonPath("$.nome").value("Entretenimento"));
     }
+
+    @Test
+    void deveExcluirCategoria() throws Exception {
+
+
+        MvcResult resultado = mockMvc.perform(
+                        post("/categorias")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("""
+                                        {
+                                        \"nome\":\"Lazer\"
+                                        }
+                                        """)
+                ).andExpect(status().isCreated())
+                .andReturn();
+
+        String resposta = resultado.getResponse().getContentAsString();
+        System.out.println(resposta);
+        Number idNumero = JsonPath.read(resposta, "$.id");
+        Long id = idNumero.longValue();
+
+        mockMvc.perform(
+                delete("/categorias/{id}", id)
+        ).andExpect(status().isNoContent());
+    }
 }
