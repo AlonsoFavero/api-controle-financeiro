@@ -53,4 +53,17 @@ public class CategoriaController {
 
         return dto;
     }
+
+    @GetMapping("/{id}")
+    public CategoriaResponseDTO buscarPorId(@PathVariable Long id){
+
+        Categoria categoriaBuscada = categoriaService.buscarPorId(id);
+
+        CategoriaResponseDTO dto = new CategoriaResponseDTO();
+
+        dto.setId(categoriaBuscada.getId());
+        dto.setNome(categoriaBuscada.getNome());
+
+        return dto;
+    }
 }
