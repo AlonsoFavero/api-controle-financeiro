@@ -80,4 +80,11 @@ public class CategoriaController {
        return dto;
 
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void excluir(@PathVariable Long id){
+
+        categoriaService.excluir(id);
+    }
 }
