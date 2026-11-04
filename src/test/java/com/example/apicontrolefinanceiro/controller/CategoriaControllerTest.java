@@ -9,10 +9,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringBootTest
@@ -109,5 +108,37 @@ public class CategoriaControllerTest {
                         get("/categorias/{id}", id)
                 ).andExpect(status().isOk())
                 .andExpect(jsonPath("$.nome").value("Lazer"));
+    }
+
+    @Test
+    void deveAtualizarCategoria() throws Exception{
+
+        MvcResult resultado = mockMvc.perform(
+                        post("/categorias")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("""
+                                {
+                                \"nome\":\"Lazer\"
+                                }
+                                """)
+                ).andExpect(status().isCreated())
+                .andReturn()  ;
+
+        String resposta = resultado.getResponse().getContentAsString();
+        System.out.println(resposta);
+        Number idNumero = JsonPath.read(resposta, "$.id");
+        Long id = idNumero.longValue();
+
+        mockMvc.perform(
+                        put("/categorias/{id}", id)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("""
+                                {
+                                \"nome\":\"Entretenimento\"
+                                }
+                                """
+                                )
+        ).andExpect(status().isOk())
+        .andExpect(jsonPath("$.nome").value("Entretenimento"));
     }
 }
