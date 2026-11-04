@@ -31,4 +31,11 @@ public class CategoriaService {
 
         return categoriaRepository.findById(id).orElseThrow();
     }
+
+    public Categoria atualizar(Long id, String nome){
+
+        Categoria categoria = buscarPorId(id);
+        categoria.setNome(nome);
+        return categoriaRepository.save(categoria);
+    }
 }

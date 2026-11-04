@@ -66,4 +66,18 @@ public class CategoriaController {
 
         return dto;
     }
+
+    @PutMapping("/{id}")
+    public CategoriaResponseDTO atualizar(@PathVariable Long id, @RequestBody @Valid CategoriaRequestDTO dados){
+
+       Categoria categoriaAtualizada = categoriaService.atualizar(id, dados.getNome());
+
+       CategoriaResponseDTO dto = new CategoriaResponseDTO();
+
+       dto.setId(categoriaAtualizada.getId());
+       dto.setNome(categoriaAtualizada.getNome());
+
+       return dto;
+
+    }
 }
