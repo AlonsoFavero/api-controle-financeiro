@@ -5,7 +5,6 @@ import com.example.apicontrolefinanceiro.repository.CategoriaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CategoriaService {
@@ -37,5 +36,11 @@ public class CategoriaService {
         Categoria categoria = buscarPorId(id);
         categoria.setNome(nome);
         return categoriaRepository.save(categoria);
+    }
+
+    public void excluir(Long id){
+
+        Categoria categoria = buscarPorId(id);
+         categoriaRepository.delete(categoria);
     }
 }
