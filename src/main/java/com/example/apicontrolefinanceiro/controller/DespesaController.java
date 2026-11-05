@@ -30,4 +30,10 @@ public class DespesaController {
 
         return despesaService.salvar(despesa);
     }
+
+    @GetMapping("/{id}")
+    public Despesa buscarPorId(@PathVariable Long id){
+
+        return despesaService.buscarPorId(id);
+    }
 }
