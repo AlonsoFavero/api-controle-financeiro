@@ -36,4 +36,10 @@ public class DespesaController {
 
         return despesaService.buscarPorId(id);
     }
+
+    @PutMapping("/{id}")
+    public Despesa atualizar(@PathVariable Long id, @RequestBody Despesa dados){
+
+        return despesaService.atualizar(id, dados);
+    }
 }
