@@ -42,4 +42,11 @@ public class DespesaController {
 
         return despesaService.atualizar(id, dados);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void excluir(@PathVariable Long id){
+
+         despesaService.excluir(id);
+    }
 }
