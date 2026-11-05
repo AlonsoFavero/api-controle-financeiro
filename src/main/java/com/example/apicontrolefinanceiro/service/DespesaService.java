@@ -20,4 +20,9 @@ public class DespesaService {
 
         return despesaRepository.findAll();
     }
+
+    public Despesa salvar(Despesa despesa){
+
+        return despesaRepository.save(despesa);
+    }
 }
