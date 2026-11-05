@@ -5,7 +5,6 @@ import com.example.apicontrolefinanceiro.repository.DespesaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class DespesaService {
@@ -27,8 +26,20 @@ public class DespesaService {
         return despesaRepository.save(despesa);
     }
 
-    public Optional<Despesa> buscarPorId(Long id){
+    public Despesa buscarPorId(Long id){
 
-        return despesaRepository.findById(id);
+        return despesaRepository.findById(id).orElseThrow();
+    }
+
+    public Despesa atualizar(Long id, Despesa dados){
+
+
+        Despesa despesa = buscarPorId(id);
+        despesa.setDescricao(dados.getDescricao());
+        despesa.setValor(dados.getValor());
+        despesa.setData(dados.getData());
+        despesa.setCategoria(dados.getCategoria());
+
+        return despesaRepository.save(despesa);
     }
 }
