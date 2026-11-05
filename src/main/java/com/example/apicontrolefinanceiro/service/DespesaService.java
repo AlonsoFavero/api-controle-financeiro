@@ -1,7 +1,10 @@
 package com.example.apicontrolefinanceiro.service;
 
+import com.example.apicontrolefinanceiro.model.Despesa;
 import com.example.apicontrolefinanceiro.repository.DespesaRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class DespesaService {
@@ -11,5 +14,10 @@ public class DespesaService {
     public DespesaService(DespesaRepository despesaRepository){
 
         this.despesaRepository = despesaRepository;
+    }
+
+    public List<Despesa> listar(){
+
+        return despesaRepository.findAll();
     }
 }
