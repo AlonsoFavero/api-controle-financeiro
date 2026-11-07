@@ -100,4 +100,15 @@ public class DespesaControllerTest {
                 delete("/despesas/{id}", id)
         ).andExpect(status().isNoContent());
     }
+
+    @Test
+    void deveRejeitarDespesaSemDescricao() throws Exception{
+
+        mockMvc.perform(
+                post("/despesas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\":{\"id\":1}}")
+
+        ).andExpect(status().isBadRequest());
+    }
 }
