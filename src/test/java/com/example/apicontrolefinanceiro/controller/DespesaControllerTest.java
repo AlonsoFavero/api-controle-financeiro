@@ -122,4 +122,15 @@ public class DespesaControllerTest {
 
         ).andExpect(status().isBadRequest());
     }
+
+    @Test
+    void deveRejeitarDespesaSemData() throws Exception{
+
+        mockMvc.perform(
+                post("/despesas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"conta de energia\", \"valor\":150.50, \"data\":null, \"categoria\":{\"id\":1}}")
+
+        ).andExpect(status().isBadRequest());
+    }
 }
