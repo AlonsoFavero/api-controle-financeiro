@@ -2,6 +2,7 @@ package com.example.apicontrolefinanceiro.controller;
 
 import com.example.apicontrolefinanceiro.model.Despesa;
 import com.example.apicontrolefinanceiro.service.DespesaService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,7 @@ public class DespesaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Despesa salvar(@RequestBody Despesa despesa){
+    public Despesa salvar(@RequestBody @Valid Despesa despesa){
 
         return despesaService.salvar(despesa);
     }
@@ -38,7 +39,7 @@ public class DespesaController {
     }
 
     @PutMapping("/{id}")
-    public Despesa atualizar(@PathVariable Long id, @RequestBody Despesa dados){
+    public Despesa atualizar(@PathVariable Long id, @RequestBody @Valid Despesa dados){
 
         return despesaService.atualizar(id, dados);
     }
