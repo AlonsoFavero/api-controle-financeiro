@@ -211,4 +211,27 @@ public class DespesaControllerTest {
 
         ).andExpect(status().isBadRequest());
     }
+
+    @Test
+    void deveRejeitarAtualizacaoSemCategoria() throws Exception{
+
+        MvcResult resultado =  mockMvc.perform(
+                        post("/despesas")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"descricao\":\"Conta de energia\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\":{\"id\":1}}")
+
+                ).andExpect(status().isCreated())
+                .andReturn();
+
+        String resposta = resultado.getResponse().getContentAsString();
+        Number idNumero = JsonPath.read(resposta, "$.id");
+        Long id = idNumero.longValue();
+
+        mockMvc.perform(
+                put("/despesas/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"Conta de energia\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\": null}")
+
+        ).andExpect(status().isBadRequest());
+    }
 }
