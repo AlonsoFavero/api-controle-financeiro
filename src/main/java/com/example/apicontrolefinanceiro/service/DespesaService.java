@@ -2,7 +2,9 @@ package com.example.apicontrolefinanceiro.service;
 
 import com.example.apicontrolefinanceiro.model.Despesa;
 import com.example.apicontrolefinanceiro.repository.DespesaRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -28,7 +30,7 @@ public class DespesaService {
 
     public Despesa buscarPorId(Long id){
 
-        return despesaRepository.findById(id).orElseThrow();
+        return despesaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     public Despesa atualizar(Long id, Despesa dados){
