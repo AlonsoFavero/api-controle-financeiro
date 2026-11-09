@@ -303,4 +303,12 @@ public class DespesaControllerTest {
 
         ).andExpect(status().isBadRequest());
     }
+
+    @Test
+    void deveRetornar404QuandoDespesaNaoExistir() throws Exception{
+
+        mockMvc.perform(
+                get("/despesas/999")
+        ).andExpect(status().isNotFound());
+    }
 }
