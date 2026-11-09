@@ -26,6 +26,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> trataErroDeValidacao (MethodArgumentNotValidException exception){
 
-        return ResponseEntity.badRequest().body("Dados inválidos");
+        String mensagem = exception.getBindingResult()
+                .getFieldErrors()
+                .get(0)
+                .getDefaultMessage();
+
+        return ResponseEntity.badRequest().body(mensagem);
     }
 }
