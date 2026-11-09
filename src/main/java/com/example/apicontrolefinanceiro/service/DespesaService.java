@@ -30,7 +30,7 @@ public class DespesaService {
 
     public Despesa buscarPorId(Long id){
 
-        return despesaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return despesaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Despesa não encontrada"));
     }
 
     public Despesa atualizar(Long id, Despesa dados){

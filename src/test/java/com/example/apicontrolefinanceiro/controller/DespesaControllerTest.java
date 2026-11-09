@@ -1,6 +1,7 @@
 package com.example.apicontrolefinanceiro.controller;
 
 import com.jayway.jsonpath.JsonPath;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,6 +19,16 @@ public class DespesaControllerTest {
 
     @Autowired
     MockMvc mockMvc;
+
+    @BeforeEach
+    void configurarCategoria() throws Exception{
+
+        mockMvc.perform(
+                post("/categorias")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"nome\":\"Alimentação\"}")
+        ).andExpect(status().isCreated());
+    }
 
     @Test
     void deveListarDespesa() throws Exception {

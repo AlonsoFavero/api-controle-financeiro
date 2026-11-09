@@ -16,7 +16,7 @@ public class GlobalExceptionHandler {
        if(exception.getStatusCode().equals(HttpStatus.NOT_FOUND)){
 
            return ResponseEntity.status(exception.getStatusCode())
-                   .body("Transacao não encontrada");
+                   .body("Despesa não encontrada");
        }
 
        return ResponseEntity.status(exception.getStatusCode())
