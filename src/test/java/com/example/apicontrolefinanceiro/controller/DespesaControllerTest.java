@@ -202,7 +202,8 @@ public class DespesaControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"descricao\":\"Conta de energia\", \"valor\":-100, \"data\":\"2026-11-07\", \"categoria\":{\"id\":1}}")
 
-        ).andExpect(status().isBadRequest());
+        ).andExpect(status().isBadRequest())
+                .andExpect(content().string("must be greater than 0"));;
     }
 
     @Test
