@@ -227,7 +227,7 @@ public class DespesaControllerTest {
                         .content("{\"descricao\":\"\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\":{\"id\":1}}")
 
         ).andExpect(status().isBadRequest())
-                .andExpect(content().string("must not be blank"));;
+                .andExpect(content().string("must not be blank"));
     }
 
     @Test
@@ -273,7 +273,8 @@ public class DespesaControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"descricao\":\"Conta de energia\", \"valor\":150.50, \"data\": null, \"categoria\":{\"id\":1}}")
 
-        ).andExpect(status().isBadRequest());
+        ).andExpect(status().isBadRequest())
+                .andExpect(content().string("must not be null"));
     }
 
     @Test
