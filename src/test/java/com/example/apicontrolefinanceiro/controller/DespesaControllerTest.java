@@ -234,7 +234,9 @@ public class DespesaControllerTest {
                         .content("{\"descricao\":\"\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\":{\"id\":1}}")
 
         ).andExpect(status().isBadRequest())
-                .andExpect(content().string("must not be null"));
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.erro").value("Erro de validação"))
+                .andExpect(jsonPath("$.mensagem").value("must not be blank"));;
     }
 
     @Test
