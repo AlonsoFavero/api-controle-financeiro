@@ -6,6 +6,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
+import com.example.apicontrolefinanceiro.exception.ErroResposta;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -24,13 +25,19 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> trataErroDeValidacao (MethodArgumentNotValidException exception){
+    public ResponseEntity<ErroResposta> trataErroDeValidacao (MethodArgumentNotValidException exception){
 
         String mensagem = exception.getBindingResult()
                 .getFieldErrors()
                 .get(0)
                 .getDefaultMessage();
 
-        return ResponseEntity.badRequest().body(mensagem);
+        ErroResposta erro = new ErroResposta(
+                400,
+                "Erro de validação",
+                mensagem
+        );
+
+        return ResponseEntity.badRequest().body(erro);
     }
 }
