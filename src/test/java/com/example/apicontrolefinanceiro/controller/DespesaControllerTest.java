@@ -407,4 +407,15 @@ public class DespesaControllerTest {
                 .andExpect(jsonPath("$[0].descricao").value("Conta de energia"));
 
     }
+
+    @Test
+    void deveRetornar404QuandoCategoriaNaoExiste() throws Exception{
+
+        mockMvc.perform(
+                        get("/despesas/categoria/999")
+                ).andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.erro").value("não encontrado"))
+                .andExpect(jsonPath("$.mensagem").value("categoria não encontrada"));
+    }
 }
