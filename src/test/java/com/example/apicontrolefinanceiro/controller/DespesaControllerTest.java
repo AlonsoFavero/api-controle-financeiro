@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -404,7 +405,28 @@ public class DespesaControllerTest {
         mockMvc.perform(
                 get("/despesas/categoria/1")
         ).andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].descricao").value("Conta de energia"));
+                .andExpect(jsonPath("$[0].descricao").value("Conta de energia"))
+                .andExpect(jsonPath("$", hasSize(1)));
+
+
+        mockMvc.perform(
+                post("/categorias")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"nome\":\"Trasporte\"}")
+
+        ).andExpect(status().isCreated());
+
+        mockMvc.perform(
+                post("/despesas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"Passagem de Ônibus \", \"valor\":20.00, \"data\":\"2026-11-08\", \"categoria\":{\"id\":2}}")
+
+        ).andExpect(status().isCreated());
+
+        mockMvc.perform(
+                        get("/despesas/categoria/1")
+                ).andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
 
     }
 
