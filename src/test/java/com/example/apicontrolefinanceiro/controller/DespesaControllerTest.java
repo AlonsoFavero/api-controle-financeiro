@@ -344,6 +344,9 @@ public class DespesaControllerTest {
 
         mockMvc.perform(
                 get("/despesas/999")
-        ).andExpect(status().isNotFound());
+        ).andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.erro").value("não encontrado"))
+                .andExpect(jsonPath("$.mensagem").value("Despesa não encontrada"));
     }
 }
