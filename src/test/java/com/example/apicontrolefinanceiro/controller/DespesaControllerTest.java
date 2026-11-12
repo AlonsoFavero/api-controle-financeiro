@@ -51,7 +51,7 @@ public class DespesaControllerTest {
     }
 
     @Test
-    void deveRejeitarDespesaComCategoriaInexistente() throws Exception{
+    void deveRejeitarDespesaComCategoriaInexistente() throws Exception {
 
         mockMvc.perform(
                 post("/despesas")
@@ -277,6 +277,29 @@ public class DespesaControllerTest {
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.erro").value("Erro de validação"))
                 .andExpect(jsonPath("$.mensagem").value("must not be null"));
+    }
+
+    @Test
+    void deveRejeitarAtualizacaoComCategoriaInexistente() throws Exception {
+
+        MvcResult resultado =  mockMvc.perform(
+                        post("/despesas")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"descricao\":\"Conta de energia\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\":{\"id\":1}}")
+
+                ).andExpect(status().isCreated())
+                .andReturn();
+
+        String resposta = resultado.getResponse().getContentAsString();
+        Number idNumero = JsonPath.read(resposta, "$.id");
+        Long id = idNumero.longValue();
+
+        mockMvc.perform(
+                put("/despesas/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"Conta de energia\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\":{\"id\" :999}}")
+
+        ).andExpect(status().isNotFound());
     }
 
     @Test
