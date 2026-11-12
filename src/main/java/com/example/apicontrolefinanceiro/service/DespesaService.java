@@ -1,21 +1,26 @@
 package com.example.apicontrolefinanceiro.service;
 
+import com.example.apicontrolefinanceiro.model.Categoria;
 import com.example.apicontrolefinanceiro.model.Despesa;
 import com.example.apicontrolefinanceiro.repository.DespesaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import com.example.apicontrolefinanceiro.repository.CategoriaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DespesaService {
 
     private final DespesaRepository despesaRepository;
+    private final CategoriaRepository categoriaRepository;
 
-    public DespesaService(DespesaRepository despesaRepository){
+    public DespesaService(DespesaRepository despesaRepository, CategoriaRepository categoriaRepository){
 
         this.despesaRepository = despesaRepository;
+        this.categoriaRepository = categoriaRepository;
     }
 
     public List<Despesa> listar(){
@@ -25,7 +30,15 @@ public class DespesaService {
 
     public Despesa salvar(Despesa despesa){
 
-        return despesaRepository.save(despesa);
+      Long categotiaId = despesa.getCategoria().getId();
+
+      if(!categoriaRepository.existsById(categotiaId)){
+          throw new ResponseStatusException(
+                  HttpStatus.NOT_FOUND, "categoria não encontrada"
+          );
+      }
+
+      return despesaRepository.save(despesa);
     }
 
     public Despesa buscarPorId(Long id){

@@ -51,6 +51,18 @@ public class DespesaControllerTest {
     }
 
     @Test
+    void deveRejeitarDespesaComCategoriaInexistente() throws Exception{
+
+        mockMvc.perform(
+                post("/despesas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"Conta de energia\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\":{\"id\":999}}")
+
+        ).andExpect(status().isNotFound());
+
+    }
+
+    @Test
     void deveBuscarDespesaPorId() throws Exception{
 
        MvcResult resultado = mockMvc.perform(
