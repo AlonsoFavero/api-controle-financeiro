@@ -138,7 +138,7 @@ public class DespesaControllerTest {
         ).andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.erro").value("Erro de validação"))
-                .andExpect(jsonPath("$.mensagem").value("must not be blank"));;
+                .andExpect(jsonPath("$.mensagem").value("must not be blank"));
     }
 
     @Test
@@ -152,7 +152,7 @@ public class DespesaControllerTest {
         ).andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.erro").value("Erro de validação"))
-                .andExpect(jsonPath("$.mensagem").value("must be greater than 0"));;
+                .andExpect(jsonPath("$.mensagem").value("must be greater than 0"));
     }
 
     @Test
@@ -389,5 +389,22 @@ public class DespesaControllerTest {
                 .andExpect(jsonPath("$.status").value(404))
                 .andExpect(jsonPath("$.erro").value("não encontrado"))
                 .andExpect(jsonPath("$.mensagem").value("Despesa não encontrada"));
+    }
+
+    @Test
+    void deveListarDespesaPorCategoria() throws Exception{
+
+        mockMvc.perform(
+                post("/despesas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"Conta de energia\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\":{\"id\":1}}")
+
+        ).andExpect(status().isCreated());
+
+        mockMvc.perform(
+                get("/despesas/categoria/1")
+        ).andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].descricao").value("Conta de energia"));
+
     }
 }
