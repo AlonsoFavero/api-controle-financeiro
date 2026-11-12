@@ -12,16 +12,17 @@ import com.example.apicontrolefinanceiro.exception.ErroResposta;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResponseStatusException.class)
-    public ResponseEntity<?> trataTransacaoNaoEncontrada (ResponseStatusException exception){
+    public ResponseEntity<ErroResposta> trataTransacaoNaoEncontrada (ResponseStatusException exception){
 
        if(exception.getStatusCode().equals(HttpStatus.NOT_FOUND)){
 
            return ResponseEntity.status(exception.getStatusCode())
-                   .body("Despesa não encontrada");
+                   .body( new ErroResposta(404 , "não encontrado", "Despesa não encontrada"));
        }
 
        return ResponseEntity.status(exception.getStatusCode())
-               .body("Erro na requisição");
+               .body( new ErroResposta(exception.getStatusCode().value(),
+        "Erro na requisição", "Erro na requisição"));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
