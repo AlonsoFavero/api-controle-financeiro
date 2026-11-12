@@ -30,9 +30,9 @@ public class DespesaService {
 
     public Despesa salvar(Despesa despesa){
 
-      Long categotiaId = despesa.getCategoria().getId();
+      Long categoriaId = despesa.getCategoria().getId();
 
-      if(!categoriaRepository.existsById(categotiaId)){
+      if(!categoriaRepository.existsById(categoriaId)){
           throw new ResponseStatusException(
                   HttpStatus.NOT_FOUND, "categoria não encontrada"
           );
@@ -48,11 +48,18 @@ public class DespesaService {
 
     public Despesa atualizar(Long id, Despesa dados){
 
-
         Despesa despesa = buscarPorId(id);
         despesa.setDescricao(dados.getDescricao());
         despesa.setValor(dados.getValor());
         despesa.setData(dados.getData());
+        Long categoriaId = dados.getCategoria().getId();
+
+        if(!categoriaRepository.existsById(categoriaId)){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "categoria não encontrada"
+            );
+        }
+
         despesa.setCategoria(dados.getCategoria());
 
         return despesaRepository.save(despesa);
