@@ -302,7 +302,10 @@ public class DespesaControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"descricao\":\"Conta de energia\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\":{\"id\" :999}}")
 
-        ).andExpect(status().isNotFound());
+        ).andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.erro").value("não encontrado"))
+                .andExpect(jsonPath("$.mensagem").value("categoria não encontrada"));
     }
 
     @Test
