@@ -50,4 +50,10 @@ public class DespesaController {
 
          despesaService.excluir(id);
     }
+
+    @GetMapping("/categoria/{categoriaId}")
+    public List<Despesa> listarPorCategoria(@PathVariable Long categoriaId){
+
+        return despesaService.buscarPorCategoria(categoriaId);
+    }
 }
