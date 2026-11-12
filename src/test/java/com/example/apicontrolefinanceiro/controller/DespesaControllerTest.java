@@ -440,4 +440,14 @@ public class DespesaControllerTest {
                 .andExpect(jsonPath("$.erro").value("não encontrado"))
                 .andExpect(jsonPath("$.mensagem").value("categoria não encontrada"));
     }
+
+    @Test
+    void deveRetornarListaVaziaQuandoCategoriaNaoPossuiDespesa() throws Exception{
+
+        mockMvc.perform(
+                        get("/despesas/categoria/1")
+                ).andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+
+    }
 }

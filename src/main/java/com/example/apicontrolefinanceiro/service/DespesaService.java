@@ -28,6 +28,17 @@ public class DespesaService {
         return despesaRepository.findAll();
     }
 
+    public List<Despesa> buscarPorCategoria(Long categoriaId) {
+
+        if (!categoriaRepository.existsById(categoriaId)) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "categoria não encontrada"
+            );
+        }
+
+        return despesaRepository.findByCategoriaId(categoriaId);
+    }
+
     public Despesa salvar(Despesa despesa){
 
       Long categoriaId = despesa.getCategoria().getId();
