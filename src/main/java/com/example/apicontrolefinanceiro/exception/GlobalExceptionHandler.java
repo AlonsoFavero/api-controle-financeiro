@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
        if(exception.getStatusCode().equals(HttpStatus.NOT_FOUND)){
 
            return ResponseEntity.status(exception.getStatusCode())
-                   .body( new ErroResposta(404 , "não encontrado", "Despesa não encontrada"));
+                   .body( new ErroResposta(404 , "não encontrado", exception.getReason()));
        }
 
        return ResponseEntity.status(exception.getStatusCode())
