@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -62,6 +63,11 @@ public class DespesaController {
 
     @GetMapping("/periodo")
     public List<Despesa> listarPorPeriodo(@RequestParam LocalDate inicio, @RequestParam LocalDate fim){
+
+        if(inicio.isAfter(fim)){
+
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Data inicial não pode ser posterior a data final");
+        }
 
         return despesaService.buscarPorPeriodo(inicio, fim);
     }
