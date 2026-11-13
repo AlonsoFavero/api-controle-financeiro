@@ -1,5 +1,6 @@
 package com.example.apicontrolefinanceiro.controller;
 
+import com.example.apicontrolefinanceiro.repository.DespesaRepository;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,8 +22,13 @@ public class DespesaControllerTest {
     @Autowired
     MockMvc mockMvc;
 
+    @Autowired
+    DespesaRepository despesaRepository;
+
     @BeforeEach
     void configurarCategoria() throws Exception{
+
+        despesaRepository.deleteAll();
 
         mockMvc.perform(
                 post("/categorias")
