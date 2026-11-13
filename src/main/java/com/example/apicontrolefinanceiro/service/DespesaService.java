@@ -1,15 +1,14 @@
 package com.example.apicontrolefinanceiro.service;
 
-import com.example.apicontrolefinanceiro.model.Categoria;
 import com.example.apicontrolefinanceiro.model.Despesa;
 import com.example.apicontrolefinanceiro.repository.DespesaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import com.example.apicontrolefinanceiro.repository.CategoriaRepository;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class DespesaService {
@@ -23,9 +22,9 @@ public class DespesaService {
         this.categoriaRepository = categoriaRepository;
     }
 
-    public List<Despesa> listar(){
+    public Page<Despesa> listar(Pageable pageable){
 
-        return despesaRepository.findAll();
+        return despesaRepository.findAll(pageable);
     }
 
     public List<Despesa> buscarPorCategoria(Long categoriaId) {

@@ -3,6 +3,8 @@ package com.example.apicontrolefinanceiro.controller;
 import com.example.apicontrolefinanceiro.model.Despesa;
 import com.example.apicontrolefinanceiro.service.DespesaService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,9 +22,9 @@ public class DespesaController {
     }
 
     @GetMapping
-    public List<Despesa> listar(){
+    public Page<Despesa> listar(Pageable pageable){
 
-        return despesaService.listar();
+        return despesaService.listar(pageable);
     }
 
     @PostMapping
