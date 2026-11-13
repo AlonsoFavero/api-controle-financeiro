@@ -495,4 +495,29 @@ public class DespesaControllerTest {
                                 .param("inicio", "2026-11-30")
                 ).andExpect(status().isBadRequest());
     }
+
+    @Test
+    void deveRetornarApenasDespesasDentroDoPeriodo() throws Exception{
+
+        mockMvc.perform(
+                post("/despesas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"Conta de energia\", \"valor\":150.50, \"data\":\"2026-11-10\", \"categoria\":{\"id\":1}}")
+
+        ).andExpect(status().isCreated());
+
+        mockMvc.perform(
+                post("/despesas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"Conta de energia\", \"valor\":150.50, \"data\":\"2026-12-10\", \"categoria\":{\"id\":1}}")
+
+        ).andExpect(status().isCreated());
+
+        mockMvc.perform(
+                        get("/despesas/periodo")
+                                .param("inicio", "2026-11-01")
+                                .param("fim", "2026-11-30")
+                ).andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+    }
 }
