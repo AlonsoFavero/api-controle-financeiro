@@ -570,4 +570,29 @@ public class DespesaControllerTest {
                 ).andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
     }
+
+    @Test
+    void deveIncluirDespesasNosLimitesDaFaixaDeValor() throws Exception{
+
+        mockMvc.perform(
+                post("/despesas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"Conta de energia\", \"valor\":100.00, \"data\":\"2026-11-01\", \"categoria\":{\"id\":1}}")
+
+        ).andExpect(status().isCreated());
+
+        mockMvc.perform(
+                post("/despesas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"Conta de energia\", \"valor\":500.00, \"data\":\"2026-11-30\", \"categoria\":{\"id\":1}}")
+
+        ).andExpect(status().isCreated());
+
+        mockMvc.perform(
+                        get("/despesas/valor")
+                                .param("valorMaximo", "500.00")
+                                .param("valorMinimo", "100.00")
+                ).andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)));
+    }
 }
