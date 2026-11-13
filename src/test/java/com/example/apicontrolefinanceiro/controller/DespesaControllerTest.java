@@ -474,4 +474,15 @@ public class DespesaControllerTest {
         ).andExpect(status().isOk())
         .andExpect(jsonPath("$", hasSize(1)));
     }
+
+    @Test
+    void deveRetornarListaVaziaQuandoNaoExistiremDespesasNoPeriodo() throws Exception{
+
+        mockMvc.perform(
+                        get("/despesas/periodo")
+                                .param("inicio", "2026-11-01")
+                                .param("fim", "2026-11-30")
+                ).andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
 }
