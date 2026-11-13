@@ -9,6 +9,7 @@ import com.example.apicontrolefinanceiro.repository.CategoriaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -86,5 +87,10 @@ public class DespesaService {
     public List<Despesa> buscarPorPeriodo(LocalDate inicio, LocalDate fim){
 
         return despesaRepository.findByDataBetween(inicio, fim);
+    }
+
+    public List<Despesa> buscarPorFaixaDeValor(BigDecimal valorMinimo, BigDecimal valorMaximo){
+
+        return despesaRepository.findByValorBetween(valorMinimo, valorMaximo);
     }
 }

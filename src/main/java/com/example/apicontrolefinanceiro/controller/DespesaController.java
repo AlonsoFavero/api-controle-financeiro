@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -70,5 +71,11 @@ public class DespesaController {
         }
 
         return despesaService.buscarPorPeriodo(inicio, fim);
+    }
+
+    @GetMapping("/valor")
+    public List<Despesa> listarPorFaixaDeValor(@RequestParam BigDecimal valorMinimo,@RequestParam BigDecimal valorMaximo){
+
+        return despesaService.buscarPorFaixaDeValor(valorMinimo, valorMaximo);
     }
 }
