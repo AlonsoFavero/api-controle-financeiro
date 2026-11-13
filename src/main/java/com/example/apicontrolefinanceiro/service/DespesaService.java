@@ -8,6 +8,8 @@ import org.springframework.web.server.ResponseStatusException;
 import com.example.apicontrolefinanceiro.repository.CategoriaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -79,5 +81,10 @@ public class DespesaService {
 
         Despesa despesa = buscarPorId(id);
         despesaRepository.delete(despesa);
+    }
+
+    public List<Despesa> buscarPorPeriodo(LocalDate inicio, LocalDate fim){
+
+        return despesaRepository.findByDataBetween(inicio, fim);
     }
 }

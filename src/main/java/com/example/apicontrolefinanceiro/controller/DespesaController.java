@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -57,5 +58,11 @@ public class DespesaController {
     public List<Despesa> listarPorCategoria(@PathVariable Long categoriaId){
 
         return despesaService.buscarPorCategoria(categoriaId);
+    }
+
+    @GetMapping("/periodo")
+    public List<Despesa> listarPorPeriodo(@RequestParam LocalDate inicio, @RequestParam LocalDate fim){
+
+        return despesaService.buscarPorPeriodo(inicio, fim);
     }
 }
