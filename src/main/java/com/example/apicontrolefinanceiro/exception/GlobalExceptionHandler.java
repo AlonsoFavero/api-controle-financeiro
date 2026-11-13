@@ -6,7 +6,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
-import com.example.apicontrolefinanceiro.exception.ErroResposta;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -22,7 +21,7 @@ public class GlobalExceptionHandler {
 
        return ResponseEntity.status(exception.getStatusCode())
                .body( new ErroResposta(exception.getStatusCode().value(),
-        "Erro na requisição", "Erro na requisição"));
+        "Erro na requisição", exception.getReason()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
