@@ -709,4 +709,31 @@ public class DespesaControllerTest {
                 ).andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
     }
+
+    @Test
+    void deveIncluirDatasLimiteNoFiltroPorCategoriaEPeriodo() throws Exception{
+
+        mockMvc.perform(
+                post("/despesas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"Conta de energia\", \"valor\":150.00, \"data\":\"2026-10-01\", \"categoria\":{\"id\":1}}")
+
+        ).andExpect(status().isCreated());
+
+        mockMvc.perform(
+                post("/despesas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"Conta de energia\", \"valor\":600.00, \"data\":\"2026-10-31\", \"categoria\":{\"id\":1}}")
+
+        ).andExpect(status().isCreated());
+
+        mockMvc.perform(
+                        get("/despesas/categoria-periodo")
+                                .param("categoriaId", "1")
+                                .param("dataInicial", "2026-10-01")
+                                .param("dataFinal", "2026-10-31")
+
+                ).andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)));
+    }
 }
