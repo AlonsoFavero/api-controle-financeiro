@@ -616,4 +616,31 @@ public class DespesaControllerTest {
                                 .param("valorMinimo", "500.00")
                 ).andExpect(status().isBadRequest());
     }
+
+    @Test
+    void deveBuscarDespesasPorCategoriaEFaixaDeValor() throws Exception{
+
+        mockMvc.perform(
+                post("/despesas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"Conta de energia\", \"valor\":150.00, \"data\":\"2026-11-30\", \"categoria\":{\"id\":1}}")
+
+        ).andExpect(status().isCreated());
+
+        mockMvc.perform(
+                post("/despesas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"Conta de energia\", \"valor\":600.00, \"data\":\"2026-11-30\", \"categoria\":{\"id\":1}}")
+
+        ).andExpect(status().isCreated());
+
+        mockMvc.perform(
+                get("/despesas/categoria-valor")
+                        .param("categoriaId", "1")
+                        .param("valorMinimo", "100.00")
+                        .param("valorMaximo", "500.00")
+
+        ).andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+    }
 }
