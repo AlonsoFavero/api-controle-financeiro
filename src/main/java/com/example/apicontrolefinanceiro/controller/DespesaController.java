@@ -95,4 +95,10 @@ public class DespesaController {
 
         return despesaService.buscarPorCategoriaEFaixaDeValor(categoriaId,valorMinimo,valorMaximo);
     }
+
+    @GetMapping("/despesas/categoria-periodo")
+    public List<Despesa> buscarPorCategoriaEPeriodo(@RequestParam Long categoriaId,@RequestParam LocalDate dataInicial,@RequestParam LocalDate dataFinal){
+
+        return despesaService.buscarPorCategoriaEPeriodo(categoriaId, dataInicial, dataFinal);
+    }
 }
