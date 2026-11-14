@@ -93,4 +93,9 @@ public class DespesaService {
 
         return despesaRepository.findByValorBetween(valorMinimo, valorMaximo);
     }
+
+    public List<Despesa> buscarPorCategoriaEFaixaDeValor(Long categoriaId, BigDecimal valorMinimo, BigDecimal valorMaximo){
+
+        return despesaRepository.findByCategoriaIdAndValorBetween(categoriaId , valorMinimo, valorMaximo);
+    }
 }

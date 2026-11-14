@@ -84,4 +84,10 @@ public class DespesaController {
 
         return despesaService.buscarPorFaixaDeValor(valorMinimo, valorMaximo);
     }
+
+    @GetMapping("/categoria-valor")
+    public List<Despesa> buscarPorCategoriaEFaixaDeValor(@RequestParam Long categoriaId, @RequestParam BigDecimal valorMinimo, @RequestParam BigDecimal valorMaximo){
+
+        return despesaService.buscarPorCategoriaEFaixaDeValor(categoriaId,valorMinimo,valorMaximo);
+    }
 }
