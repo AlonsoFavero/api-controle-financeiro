@@ -76,6 +76,12 @@ public class DespesaController {
     @GetMapping("/valor")
     public List<Despesa> listarPorFaixaDeValor(@RequestParam BigDecimal valorMinimo,@RequestParam BigDecimal valorMaximo){
 
+        if(valorMinimo.compareTo(valorMaximo) > 0){
+
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "valor minimo não pode ser maior que o valor maximo");
+
+        }
+
         return despesaService.buscarPorFaixaDeValor(valorMinimo, valorMaximo);
     }
 }
