@@ -736,4 +736,15 @@ public class DespesaControllerTest {
                 ).andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
     }
+
+    @Test
+    void deveRetornarErroQuandoDataInicialForPosteriorADataFinalNoFiltroCombinado() throws Exception{
+
+        mockMvc.perform(
+                get("/despesas/categoria-periodo")
+                        .param("categoriaId", "1")
+                        .param("dataInicial", "2026-10-31")
+                        .param("dataFinal", "2026-10-01")
+        ).andExpect(status().isBadRequest());
+    }
 }
