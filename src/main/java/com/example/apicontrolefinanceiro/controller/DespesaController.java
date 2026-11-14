@@ -96,8 +96,13 @@ public class DespesaController {
         return despesaService.buscarPorCategoriaEFaixaDeValor(categoriaId,valorMinimo,valorMaximo);
     }
 
-    @GetMapping("/despesas/categoria-periodo")
+    @GetMapping("/categoria-periodo")
     public List<Despesa> buscarPorCategoriaEPeriodo(@RequestParam Long categoriaId,@RequestParam LocalDate dataInicial,@RequestParam LocalDate dataFinal){
+
+        if(dataInicial.isAfter(dataFinal)){
+
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "data inicial não pode ser posterior a data final");
+        }
 
         return despesaService.buscarPorCategoriaEPeriodo(categoriaId, dataInicial, dataFinal);
     }

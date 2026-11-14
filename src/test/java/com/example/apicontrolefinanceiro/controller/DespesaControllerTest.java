@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -692,7 +693,8 @@ public class DespesaControllerTest {
                         .param("dataInicial", "2026-10-01")
                         .param("dataFinal", "2026-10-31")
 
-        ).andExpect(status().isOk())
+        ).andDo(print())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
 
     }
