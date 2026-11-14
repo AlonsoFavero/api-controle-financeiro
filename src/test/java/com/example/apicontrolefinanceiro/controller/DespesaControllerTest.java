@@ -643,4 +643,17 @@ public class DespesaControllerTest {
         ).andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
     }
+
+    @Test
+    void deveRetornarListaVaziaQuandoNaoExistiremDespesasPorCategoriaEFaixaDeValor() throws Exception{
+
+        mockMvc.perform(
+                        get("/despesas/categoria-valor")
+                                .param("categoriaId", "1")
+                                .param("valorMinimo", "100.00")
+                                .param("valorMaximo", "500.00")
+
+                ).andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
 }
