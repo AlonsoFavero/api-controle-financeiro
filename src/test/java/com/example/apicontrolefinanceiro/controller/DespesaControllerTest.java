@@ -696,4 +696,17 @@ public class DespesaControllerTest {
                 .andExpect(jsonPath("$", hasSize(1)));
 
     }
+
+    @Test
+    void deveRetornarListaVaziaQuandoNaoExistiremDespesasPorCategoriaEPeriodo() throws Exception{
+
+        mockMvc.perform(
+                        get("/despesas/categoria-periodo")
+                                .param("categoriaId", "1")
+                                .param("dataInicial", "2026-10-01")
+                                .param("dataFinal", "2026-10-31")
+
+                ).andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
 }
