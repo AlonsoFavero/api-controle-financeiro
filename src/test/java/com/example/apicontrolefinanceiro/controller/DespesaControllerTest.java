@@ -606,4 +606,14 @@ public class DespesaControllerTest {
                 ).andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
     }
+
+    @Test
+    void deveRetornarErroQuandoValorMinimoForMaiorQueMaximo() throws Exception{
+
+        mockMvc.perform(
+                        get("/despesas/valor")
+                                .param("valorMaximo", "100.00")
+                                .param("valorMinimo", "500.00")
+                ).andExpect(status().isBadRequest());
+    }
 }
