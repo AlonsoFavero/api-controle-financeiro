@@ -88,6 +88,11 @@ public class DespesaController {
     @GetMapping("/categoria-valor")
     public List<Despesa> buscarPorCategoriaEFaixaDeValor(@RequestParam Long categoriaId, @RequestParam BigDecimal valorMinimo, @RequestParam BigDecimal valorMaximo){
 
+        if(valorMinimo.compareTo(valorMaximo) > 0){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"valor minimo não pode ser maior que o valor maximo"
+            );
+        }
+
         return despesaService.buscarPorCategoriaEFaixaDeValor(categoriaId,valorMinimo,valorMaximo);
     }
 }
