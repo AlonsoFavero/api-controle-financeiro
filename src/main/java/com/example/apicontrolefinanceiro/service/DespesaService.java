@@ -89,9 +89,9 @@ public class DespesaService {
         return despesaRepository.findByDataBetween(inicio, fim, pageable);
     }
 
-    public List<Despesa> buscarPorFaixaDeValor(BigDecimal valorMinimo, BigDecimal valorMaximo){
+    public Page<Despesa> buscarPorFaixaDeValor(BigDecimal valorMinimo, BigDecimal valorMaximo, Pageable pageable){
 
-        return despesaRepository.findByValorBetween(valorMinimo, valorMaximo);
+        return despesaRepository.findByValorBetween(valorMinimo, valorMaximo, pageable);
     }
 
     public Page<Despesa> buscarPorCategoriaEFaixaDeValor(Long categoriaId, BigDecimal valorMinimo, BigDecimal valorMaximo, Pageable pageable){

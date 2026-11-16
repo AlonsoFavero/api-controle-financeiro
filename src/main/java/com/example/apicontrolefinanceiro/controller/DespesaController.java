@@ -74,7 +74,7 @@ public class DespesaController {
     }
 
     @GetMapping("/valor")
-    public List<Despesa> listarPorFaixaDeValor(@RequestParam BigDecimal valorMinimo,@RequestParam BigDecimal valorMaximo){
+    public Page<Despesa> listarPorFaixaDeValor(@RequestParam BigDecimal valorMinimo,@RequestParam BigDecimal valorMaximo, Pageable pageable){
 
         if(valorMinimo.compareTo(valorMaximo) > 0){
 
@@ -82,7 +82,7 @@ public class DespesaController {
 
         }
 
-        return despesaService.buscarPorFaixaDeValor(valorMinimo, valorMaximo);
+        return despesaService.buscarPorFaixaDeValor(valorMinimo, valorMaximo, pageable);
     }
 
     @GetMapping("/categoria-valor")
