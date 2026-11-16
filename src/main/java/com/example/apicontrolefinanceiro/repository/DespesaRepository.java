@@ -14,7 +14,8 @@ public interface DespesaRepository extends JpaRepository<Despesa, Long> {
     List<Despesa> findByCategoriaId(Long categoriaId);
     List<Despesa> findByDataBetween(LocalDate inicio, LocalDate fim);
     List<Despesa> findByValorBetween(BigDecimal valorMinimo, BigDecimal valorMaximo);
-    List<Despesa> findByCategoriaIdAndValorBetween(Long categoriaId, BigDecimal valorMinimo, BigDecimal valorMaximo);
+    Page<Despesa> findByCategoriaIdAndValorBetween(Long categoriaId, BigDecimal valorMinimo, BigDecimal valorMaximo, Pageable pageable);
     Page<Despesa> findByCategoriaIdAndDataBetween(Long categoriaId, LocalDate dataInicial, LocalDate dataFinal, Pageable pageable);
+
 
 }
