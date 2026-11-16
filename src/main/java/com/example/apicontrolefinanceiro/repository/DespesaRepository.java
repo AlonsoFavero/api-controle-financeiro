@@ -12,7 +12,7 @@ import java.util.List;
 public interface DespesaRepository extends JpaRepository<Despesa, Long> {
 
     List<Despesa> findByCategoriaId(Long categoriaId);
-    List<Despesa> findByDataBetween(LocalDate inicio, LocalDate fim);
+    Page<Despesa> findByDataBetween(LocalDate inicio, LocalDate fim, Pageable pageable);
     List<Despesa> findByValorBetween(BigDecimal valorMinimo, BigDecimal valorMaximo);
     Page<Despesa> findByCategoriaIdAndValorBetween(Long categoriaId, BigDecimal valorMinimo, BigDecimal valorMaximo, Pageable pageable);
     Page<Despesa> findByCategoriaIdAndDataBetween(Long categoriaId, LocalDate dataInicial, LocalDate dataFinal, Pageable pageable);

@@ -84,9 +84,9 @@ public class DespesaService {
         despesaRepository.delete(despesa);
     }
 
-    public List<Despesa> buscarPorPeriodo(LocalDate inicio, LocalDate fim){
+    public Page<Despesa> buscarPorPeriodo(LocalDate inicio, LocalDate fim, Pageable pageable){
 
-        return despesaRepository.findByDataBetween(inicio, fim);
+        return despesaRepository.findByDataBetween(inicio, fim, pageable);
     }
 
     public List<Despesa> buscarPorFaixaDeValor(BigDecimal valorMinimo, BigDecimal valorMaximo){

@@ -63,14 +63,14 @@ public class DespesaController {
     }
 
     @GetMapping("/periodo")
-    public List<Despesa> listarPorPeriodo(@RequestParam LocalDate inicio, @RequestParam LocalDate fim){
+    public Page<Despesa> listarPorPeriodo(@RequestParam LocalDate inicio, @RequestParam LocalDate fim, Pageable pageable){
 
         if(inicio.isAfter(fim)){
 
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Data inicial não pode ser posterior a data final");
         }
 
-        return despesaService.buscarPorPeriodo(inicio, fim);
+        return despesaService.buscarPorPeriodo(inicio, fim, pageable);
     }
 
     @GetMapping("/valor")
