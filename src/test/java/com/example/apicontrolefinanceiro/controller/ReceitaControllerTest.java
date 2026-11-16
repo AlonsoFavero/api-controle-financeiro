@@ -10,9 +10,8 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -68,6 +67,28 @@ public class ReceitaControllerTest {
 
         mockMvc.perform(
                 get("/receitas/{id}", id)
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    void deveAtualizarReceita() throws Exception{
+
+        MvcResult resultado = mockMvc.perform(
+                        post("/receitas")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"descricao\":\"Conta de energia\", \"valor\":5000.00, \"data\":\"2026-11-16\"}")
+                ).andExpect(status().isCreated())
+                .andReturn();
+
+
+        String resposta = resultado.getResponse().getContentAsString();
+        Number idNumero = JsonPath.read(resposta, "$.id");
+        Long id = idNumero.longValue();
+
+        mockMvc.perform(
+                put("/receitas/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"Conta de energia Atualizada\", \"valor\":4000.00, \"data\":\"2026-11-17\"}")
         ).andExpect(status().isOk());
     }
 }
