@@ -2,12 +2,11 @@ package com.example.apicontrolefinanceiro.service;
 
 import com.example.apicontrolefinanceiro.model.Receita;
 import com.example.apicontrolefinanceiro.repository.ReceitaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ReceitaService {
@@ -23,21 +22,21 @@ public class ReceitaService {
         return receitaRepository.save(receita);
     }
 
-    public List<Receita> listar(){
+    public Page<Receita> listar(Pageable pageable){
 
-        return receitaRepository.findAll();
+        return receitaRepository.findAll(pageable);
     }
 
-    public Optional<Receita> buscarPorId(Long id){
+    public Receita buscarPorId(Long id){
 
-        return receitaRepository.findById(id);
+        return receitaRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     public Receita atualizar(Long id, Receita novosDados){
 
-        Receita receita = buscarPorId(id)
-                .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Receita receita = buscarPorId(id);
 
         receita.setDescricao(novosDados.getDescricao());
         receita.setData(novosDados.getData());
@@ -48,9 +47,7 @@ public class ReceitaService {
 
     public void excluirPorId(Long id) {
 
-        buscarPorId(id)
-                .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND));
+        buscarPorId(id);
 
         receitaRepository.deleteById(id);
     }
