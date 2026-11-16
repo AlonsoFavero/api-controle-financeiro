@@ -21,7 +21,7 @@ public class ReceitaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Receita salvar(Receita receita){
+    public Receita salvar(@RequestBody @Valid Receita receita){
 
         return receitaService.salvar(receita);
     }

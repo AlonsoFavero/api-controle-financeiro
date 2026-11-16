@@ -111,4 +111,14 @@ public class ReceitaControllerTest {
                 delete("/receitas/{id}", id)
         ).andExpect(status().isNoContent());
     }
+
+    @Test
+    void deveRejeitarReceitaComDescricaoVazia() throws Exception{
+
+        mockMvc.perform(
+                post("/receitas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"  \", \"valor\":5000.00, \"data\":\"2026-11-16\"}")
+        ).andExpect(status().isBadRequest());
+    }
 }
