@@ -1,6 +1,7 @@
 package com.example.apicontrolefinanceiro.controller;
 
 import com.example.apicontrolefinanceiro.repository.ReceitaRepository;
+import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import org.springframework.test.web.servlet.MvcResult;
+
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -46,5 +49,25 @@ public class ReceitaControllerTest {
        mockMvc.perform(
                get("/receitas")
        ).andExpect(status().isOk());
+    }
+
+    @Test
+    void deveBuscarReceitaPorId() throws Exception{
+
+       MvcResult resultado = mockMvc.perform(
+                post("/receitas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"Conta de energia\", \"valor\":5000.00, \"data\":\"2026-11-16\"}")
+        ).andExpect(status().isCreated())
+               .andReturn();
+
+
+        String resposta = resultado.getResponse().getContentAsString();
+        Number idNumero = JsonPath.read(resposta, "$.id");
+        Long id = idNumero.longValue();
+
+        mockMvc.perform(
+                get("/receitas/{id}", id)
+        ).andExpect(status().isOk());
     }
 }
