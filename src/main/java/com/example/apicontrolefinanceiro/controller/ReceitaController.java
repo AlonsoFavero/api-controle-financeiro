@@ -45,6 +45,7 @@ public class ReceitaController {
     }
 
     @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void excluir(@PathVariable Long id){
 
         receitaService.excluirPorId(id);

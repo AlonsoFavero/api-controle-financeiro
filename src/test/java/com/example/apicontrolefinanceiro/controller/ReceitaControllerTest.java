@@ -91,4 +91,24 @@ public class ReceitaControllerTest {
                         .content("{\"descricao\":\"Conta de energia Atualizada\", \"valor\":4000.00, \"data\":\"2026-11-17\"}")
         ).andExpect(status().isOk());
     }
+
+    @Test
+    void deveExcluirReceita() throws Exception{
+
+        MvcResult resultado = mockMvc.perform(
+                        post("/receitas")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"descricao\":\"Conta de energia\", \"valor\":5000.00, \"data\":\"2026-11-16\"}")
+                ).andExpect(status().isCreated())
+                .andReturn();
+
+
+        String resposta = resultado.getResponse().getContentAsString();
+        Number idNumero = JsonPath.read(resposta, "$.id");
+        Long id = idNumero.longValue();
+
+        mockMvc.perform(
+                delete("/receitas/{id}", id)
+        ).andExpect(status().isNoContent());
+    }
 }
