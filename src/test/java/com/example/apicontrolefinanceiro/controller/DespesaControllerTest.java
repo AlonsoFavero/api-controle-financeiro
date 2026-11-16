@@ -824,4 +824,38 @@ public class DespesaControllerTest {
                 .andExpect(jsonPath("$.content", hasSize(1)))
                 .andExpect(jsonPath("$.totalElements", is(3)));
     }
+
+    @Test
+    void deveOrdenarDespesasPorValor() throws Exception{
+
+        mockMvc.perform(
+                post("/despesas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"Conta de energia\", \"valor\":300.00, \"data\":\"2026-10-31\", \"categoria\":{\"id\":1}}")
+
+        ).andExpect(status().isCreated());
+
+        mockMvc.perform(
+                post("/despesas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"Conta de energia\", \"valor\":600.00, \"data\":\"2026-10-31\", \"categoria\":{\"id\":1}}")
+
+        ).andExpect(status().isCreated());
+
+        mockMvc.perform(
+                post("/despesas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"Conta de energia\", \"valor\":150.00, \"data\":\"2026-10-31\", \"categoria\":{\"id\":1}}")
+
+        ).andExpect(status().isCreated());
+
+        mockMvc.perform(
+                        get("/despesas")
+                                .param("sort", "valor,asc")
+                ).andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[0].valor", is(150.0)))
+                .andExpect(jsonPath("$.content[1].valor", is(300.0)))
+                .andExpect(jsonPath("$.content[2].valor", is(600.0)));
+
+    }
 }
