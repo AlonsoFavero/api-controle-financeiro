@@ -643,7 +643,7 @@ public class DespesaControllerTest {
                         .param("valorMaximo", "500.00")
 
         ).andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)));
+                .andExpect(jsonPath("$.content", hasSize(1)));
     }
 
     @Test
@@ -656,7 +656,7 @@ public class DespesaControllerTest {
                                 .param("valorMaximo", "500.00")
 
                 ).andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(0)));
+                .andExpect(jsonPath("$.content", hasSize(0)));
     }
 
     @Test
@@ -696,7 +696,7 @@ public class DespesaControllerTest {
 
         ).andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)));
+                .andExpect(jsonPath("$.content", hasSize(1)));
 
     }
 
@@ -710,7 +710,7 @@ public class DespesaControllerTest {
                                 .param("dataFinal", "2026-10-31")
 
                 ).andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(0)));
+                .andExpect(jsonPath("$.content", hasSize(0)));
     }
 
     @Test
@@ -737,7 +737,7 @@ public class DespesaControllerTest {
                                 .param("dataFinal", "2026-10-31")
 
                 ).andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)));
+                .andExpect(jsonPath("$.content", hasSize(2)));
     }
 
     @Test
