@@ -1,0 +1,50 @@
+package com.example.apicontrolefinanceiro.controller;
+
+import com.example.apicontrolefinanceiro.model.Receita;
+import com.example.apicontrolefinanceiro.service.ReceitaService;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
+
+
+@RestController
+@RequestMapping("/receitas")
+public class ReceitaController {
+
+    private final ReceitaService receitaService;
+
+    public ReceitaController(ReceitaService receitaService) {
+        this.receitaService = receitaService;
+    }
+
+    @PostMapping
+    public Receita salvar(Receita receita){
+
+        return receitaService.salvar(receita);
+    }
+
+    @GetMapping
+    public Page<Receita> listar(@RequestBody @Valid Pageable pageable){
+
+        return receitaService.listar(pageable);
+    }
+
+    @GetMapping("{id}")
+    public Receita buscarPorId(@PathVariable Long id){
+
+        return receitaService.buscarPorId(id);
+    }
+
+    @PutMapping("{id}")
+    public Receita atualizar(@PathVariable Long id, @RequestBody @Valid Receita dados){
+
+        return receitaService.atualizar(id, dados);
+    }
+
+    @DeleteMapping("{id}")
+    public void excluir(@PathVariable Long id){
+
+        receitaService.excluirPorId(id);
+    }
+}
