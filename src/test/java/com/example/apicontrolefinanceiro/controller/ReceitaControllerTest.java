@@ -11,7 +11,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -37,5 +38,13 @@ public class ReceitaControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"descricao\":\"Conta de energia\", \"valor\":5000.00, \"data\":\"2026-11-16\"}")
         ).andExpect(status().isCreated());
+    }
+
+    @Test
+    void deveListarReceitas() throws Exception{
+
+       mockMvc.perform(
+               get("/receitas")
+       ).andExpect(status().isOk());
     }
 }

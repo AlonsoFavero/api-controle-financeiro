@@ -5,6 +5,7 @@ import com.example.apicontrolefinanceiro.service.ReceitaService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -19,13 +20,14 @@ public class ReceitaController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Receita salvar(Receita receita){
 
         return receitaService.salvar(receita);
     }
 
     @GetMapping
-    public Page<Receita> listar(@RequestBody @Valid Pageable pageable){
+    public Page<Receita> listar(Pageable pageable){
 
         return receitaService.listar(pageable);
     }
