@@ -787,4 +787,41 @@ public class DespesaControllerTest {
                 .andExpect(jsonPath("$.content", hasSize(2)))
                 .andExpect(jsonPath("$.totalElements", is(3)));
     }
+
+    @Test
+    void deveRetornarSegundaPaginaNoFiltroPorCategoriaEPeriodo() throws Exception{
+
+        mockMvc.perform(
+                post("/despesas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"Conta de energia\", \"valor\":150.00, \"data\":\"2026-10-31\", \"categoria\":{\"id\":1}}")
+
+        ).andExpect(status().isCreated());
+
+        mockMvc.perform(
+                post("/despesas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"Conta de energia\", \"valor\":600.00, \"data\":\"2026-10-31\", \"categoria\":{\"id\":1}}")
+
+        ).andExpect(status().isCreated());
+
+        mockMvc.perform(
+                post("/despesas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"Conta de energia\", \"valor\":150.00, \"data\":\"2026-10-31\", \"categoria\":{\"id\":1}}")
+
+        ).andExpect(status().isCreated());
+
+        mockMvc.perform(
+                        get("/despesas/categoria-periodo")
+                                .param("categoriaId", "1")
+                                .param("dataInicial", "2026-10-31")
+                                .param("dataFinal", "2026-10-31")
+                                .param("page", "1")
+                                .param("size", "2")
+
+                ).andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", hasSize(1)))
+                .andExpect(jsonPath("$.totalElements", is(3)));
+    }
 }
