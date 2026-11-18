@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 
@@ -57,5 +58,11 @@ public class ReceitaController {
     public Page<Receita> listarPeriodo(LocalDate inicio, LocalDate fim, Pageable pageable){
 
         return receitaService.listarPorPeriodo(inicio, fim, pageable);
+    }
+
+    @GetMapping("/valor")
+    public Page<Receita> listarValor(BigDecimal valorMinimo, BigDecimal valorMaximo, Pageable pageable){
+
+        return receitaService.listarPorValor(valorMinimo, valorMaximo, pageable);
     }
 }
