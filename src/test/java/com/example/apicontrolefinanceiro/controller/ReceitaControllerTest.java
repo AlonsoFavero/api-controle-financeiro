@@ -131,4 +131,14 @@ public class ReceitaControllerTest {
                         .content("{\"descricao\":\"Conta de energia\", \"valor\":-5000.00, \"data\":\"2026-11-16\"}")
         ).andExpect(status().isBadRequest());
     }
+
+    @Test
+    void deveRejeitarComValorZero() throws Exception{
+
+        mockMvc.perform(
+                post("/receitas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"Conta de energia\", \"valor\":0, \"data\":\"2026-11-16\"}")
+        ).andExpect(status().isBadRequest());
+    }
 }
