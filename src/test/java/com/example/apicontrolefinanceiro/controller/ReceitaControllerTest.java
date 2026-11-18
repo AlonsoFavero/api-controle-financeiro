@@ -161,4 +161,26 @@ public class ReceitaControllerTest {
                         .content("{\"descricao\":\"Conta de energia\", \"valor\": null, \"data\":\"2026-11-16\"}")
         ).andExpect(status().isBadRequest());
     }
+
+    @Test
+    void deveListarReceitasPorPeriodo() throws Exception{
+
+        mockMvc.perform(
+                post("/receitas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"Conta de energia\", \"valor\":5000.00, \"data\":\"2026-10-16\"}")
+        ).andExpect(status().isCreated());
+
+        mockMvc.perform(
+                post("/receitas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"Conta de energia\", \"valor\":5000.00, \"data\":\"2026-11-20\"}")
+        ).andExpect(status().isCreated());
+
+        mockMvc.perform(
+                get("/receitas/periodo")
+                        .param("inicio", "2026-10-01")
+                        .param("fim", "2026-10-31")
+        ).andExpect(status().isOk());
+    }
 }
