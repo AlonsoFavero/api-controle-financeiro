@@ -205,4 +205,28 @@ public class ReceitaControllerTest {
                         .param("valorMaximo", "6000.00")
         ).andExpect(status().isOk());
     }
+
+    @Test
+    void deveListarReceitasPorValorEPeriodo() throws Exception{
+
+        mockMvc.perform(
+                post("/receitas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"Conta de energia\", \"valor\":3000.00, \"data\":\"2026-11-20\"}")
+        ).andExpect(status().isCreated());
+
+        mockMvc.perform(
+                post("/receitas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"Conta de energia\", \"valor\":6000.00, \"data\":\"2026-10-15\"}")
+        ).andExpect(status().isCreated());
+
+        mockMvc.perform(
+                get("/receitas/filtros")
+                        .param("valorMinimo", "1000.00")
+                        .param("valorMaximo", "5000.00")
+                        .param("inicio", "2026-10-01")
+                        .param("fim", "2026-10-31")
+        ).andExpect(status().isOk());
+    }
 }
