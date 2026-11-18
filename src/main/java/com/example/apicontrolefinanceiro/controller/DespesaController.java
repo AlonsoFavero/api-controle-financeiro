@@ -2,6 +2,7 @@ package com.example.apicontrolefinanceiro.controller;
 
 import com.example.apicontrolefinanceiro.model.Despesa;
 import com.example.apicontrolefinanceiro.service.DespesaService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +27,7 @@ public class DespesaController {
     }
 
     @GetMapping
+    @Operation(summary = "Lista de todas as despesas", description = "Retorna as despesas cadastrasdas com paginação")
     public Page<Despesa> listar(Pageable pageable){
 
         return despesaService.listar(pageable);
@@ -33,18 +35,21 @@ public class DespesaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Cadastra uma nova despesa", description = "Recebe os dados e registra uma nova despesa")
     public Despesa salvar(@RequestBody @Valid Despesa despesa){
 
         return despesaService.salvar(despesa);
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Busca uma despesa por ID", description = "Retorna os dados de uma despesa específica")
     public Despesa buscarPorId(@PathVariable Long id){
 
         return despesaService.buscarPorId(id);
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Atualiza uma despesa", description = "Atualiza os dados de uma despesa existente pelo ID")
     public Despesa atualizar(@PathVariable Long id, @RequestBody @Valid Despesa dados){
 
         return despesaService.atualizar(id, dados);
@@ -52,18 +57,21 @@ public class DespesaController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Exclui uma despesa", description = "Remove uma despesa pelo ID")
     public void excluir(@PathVariable Long id){
 
          despesaService.excluir(id);
     }
 
     @GetMapping("/categoria/{categoriaId}")
+    @Operation(summary = "Lista despesas por categoria", description = "Retorna todas as despesas associadas a uma categoria específica")
     public List<Despesa> listarPorCategoria(@PathVariable Long categoriaId){
 
         return despesaService.buscarPorCategoria(categoriaId);
     }
 
     @GetMapping("/periodo")
+    @Operation(summary = "Filtra despesas por período", description = "Retorna despesas dentro de um intervalo de datas")
     public Page<Despesa> listarPorPeriodo(@RequestParam LocalDate inicio, @RequestParam LocalDate fim, Pageable pageable){
 
         if(inicio.isAfter(fim)){
@@ -75,6 +83,7 @@ public class DespesaController {
     }
 
     @GetMapping("/valor")
+    @Operation(summary = "Filtra despesas por faixa de valor", description = "Retorna despesas entre um valor mínimo e máximo")
     public Page<Despesa> listarPorFaixaDeValor(@RequestParam BigDecimal valorMinimo,@RequestParam BigDecimal valorMaximo, Pageable pageable){
 
         if(valorMinimo.compareTo(valorMaximo) > 0){
@@ -87,6 +96,7 @@ public class DespesaController {
     }
 
     @GetMapping("/categoria-valor")
+    @Operation(summary = "Filtra despesas por categoria e valor", description = "Retorna despesas de uma categoria dentro de uma faixa de valor")
     public Page<Despesa> buscarPorCategoriaEFaixaDeValor(@RequestParam Long categoriaId, @RequestParam BigDecimal valorMinimo, @RequestParam BigDecimal valorMaximo, Pageable pageable){
 
         if(valorMinimo.compareTo(valorMaximo) > 0){
@@ -98,6 +108,7 @@ public class DespesaController {
     }
 
     @GetMapping("/categoria-periodo")
+    @Operation(summary = "Filtra despesas por categoria e período", description = "Retorna despesas de uma categoria dentro de um intervalo de datas")
     public Page<Despesa> buscarPorCategoriaEPeriodo(@RequestParam Long categoriaId,@RequestParam LocalDate dataInicial,@RequestParam LocalDate dataFinal , Pageable pageable){
 
         if(dataInicial.isAfter(dataFinal)){
