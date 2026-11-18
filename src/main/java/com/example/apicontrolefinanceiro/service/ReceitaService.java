@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
+
 @Service
 public class ReceitaService {
 
@@ -50,5 +52,10 @@ public class ReceitaService {
         buscarPorId(id);
 
         receitaRepository.deleteById(id);
+    }
+
+    public Page<Receita> listarPorPeriodo(LocalDate inicio, LocalDate fim, Pageable pageable){
+
+        return receitaRepository.findByDataBetween(inicio, fim, pageable);
     }
 }
