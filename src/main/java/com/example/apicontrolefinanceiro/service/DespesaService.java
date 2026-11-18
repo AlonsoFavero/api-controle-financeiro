@@ -103,4 +103,8 @@ public class DespesaService {
 
         return despesaRepository.findByCategoriaIdAndDataBetween(categoriaId, dataInicial, dataFinal, pageable);
     }
+    public BigDecimal somarDespesasPorPeriodo(LocalDate inicio, LocalDate fim){
+
+        return despesaRepository.somarDespesasPorPeriodo(inicio, fim);
+    }
 }
