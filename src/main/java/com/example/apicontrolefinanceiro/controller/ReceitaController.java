@@ -65,4 +65,10 @@ public class ReceitaController {
 
         return receitaService.listarPorValor(valorMinimo, valorMaximo, pageable);
     }
+
+    @GetMapping("/filtros")
+    public Page<Receita> listarValorEPeriodo(BigDecimal valorMinimo, BigDecimal valorMaximo, LocalDate inicio, LocalDate fim, Pageable pageable){
+
+        return receitaService.listarPorValorEPeriodo(valorMinimo, valorMaximo, inicio, fim, pageable);
+    }
 }
