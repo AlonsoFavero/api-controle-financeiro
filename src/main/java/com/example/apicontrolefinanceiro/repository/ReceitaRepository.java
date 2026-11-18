@@ -12,4 +12,6 @@ public interface ReceitaRepository extends JpaRepository<Receita, Long> {
 
     Page<Receita> findByDataBetween(LocalDate inicio, LocalDate fim, Pageable pageable);
     Page<Receita> findByValorBetween(BigDecimal valorMinimo, BigDecimal valorMaximo, Pageable pageable);
+    Page<Receita> findByValorBetweenAndDataBetween(BigDecimal valorMinimo, BigDecimal valorMaximo, LocalDate inicio, LocalDate fim, Pageable pageable);
+
 }
