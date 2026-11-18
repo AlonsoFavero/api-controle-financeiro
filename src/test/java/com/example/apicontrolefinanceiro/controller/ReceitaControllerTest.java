@@ -183,4 +183,26 @@ public class ReceitaControllerTest {
                         .param("fim", "2026-10-31")
         ).andExpect(status().isOk());
     }
+
+    @Test
+    void deveListarReceitaPorValor() throws Exception{
+
+        mockMvc.perform(
+                post("/receitas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"Conta de energia\", \"valor\":6000.00, \"data\":\"2026-10-16\"}")
+        ).andExpect(status().isCreated());
+
+        mockMvc.perform(
+                post("/receitas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"Conta de energia\", \"valor\":5000.00, \"data\":\"2026-11-20\"}")
+        ).andExpect(status().isCreated());
+
+        mockMvc.perform(
+                get("/receitas/valor")
+                        .param("valorMinimo", "5000.00")
+                        .param("valorMaximo", "6000.00")
+        ).andExpect(status().isOk());
+    }
 }
