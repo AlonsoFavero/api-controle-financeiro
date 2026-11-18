@@ -64,4 +64,9 @@ public class ReceitaService {
 
         return receitaRepository.findByValorBetween(valorMaximo, valorMinimo, pageable);
     }
+
+    public Page<Receita> listarPorValorEPeriodo(BigDecimal valorMinimo ,BigDecimal valorMaximo ,LocalDate inicio ,LocalDate fim ,Pageable pageable){
+
+        return receitaRepository.findByValorBetweenAndDataBetween(valorMinimo, valorMaximo, inicio, fim, pageable);
+    }
 }
