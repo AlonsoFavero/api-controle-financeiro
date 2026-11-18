@@ -28,7 +28,7 @@ public class DespesaControllerTest {
     DespesaRepository despesaRepository;
 
     @BeforeEach
-    void configurarCategoria() throws Exception{
+    void configurarCategoria() throws Exception {
 
         despesaRepository.deleteAll();
 
@@ -63,11 +63,11 @@ public class DespesaControllerTest {
     void deveRejeitarDespesaComCategoriaInexistente() throws Exception {
 
         mockMvc.perform(
-                post("/despesas")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"descricao\":\"Conta de energia\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\":{\"id\":999}}")
+                        post("/despesas")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"descricao\":\"Conta de energia\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\":{\"id\":999}}")
 
-        ).andExpect(status().isNotFound())
+                ).andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value(404))
                 .andExpect(jsonPath("$.erro").value("não encontrado"))
                 .andExpect(jsonPath("$.mensagem").value("categoria não encontrada"));
@@ -75,15 +75,15 @@ public class DespesaControllerTest {
     }
 
     @Test
-    void deveBuscarDespesaPorId() throws Exception{
+    void deveBuscarDespesaPorId() throws Exception {
 
-       MvcResult resultado = mockMvc.perform(
-                post("/despesas")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"descricao\":\"Conta de energia\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\":{\"id\":1}}")
+        MvcResult resultado = mockMvc.perform(
+                        post("/despesas")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"descricao\":\"Conta de energia\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\":{\"id\":1}}")
 
-        ).andExpect(status().isCreated())
-               .andReturn();
+                ).andExpect(status().isCreated())
+                .andReturn();
 
         String resposta = resultado.getResponse().getContentAsString();
         Number idNumero = JsonPath.read(resposta, "$.id");
@@ -95,7 +95,7 @@ public class DespesaControllerTest {
     }
 
     @Test
-    void deveAtualizarDespesa() throws Exception{
+    void deveAtualizarDespesa() throws Exception {
 
         MvcResult resultado = mockMvc.perform(
                         post("/despesas")
@@ -117,7 +117,7 @@ public class DespesaControllerTest {
     }
 
     @Test
-    void deveExcluirDespesa() throws Exception{
+    void deveExcluirDespesa() throws Exception {
 
         MvcResult resultado = mockMvc.perform(
                         post("/despesas")
@@ -137,63 +137,65 @@ public class DespesaControllerTest {
     }
 
     @Test
-    void deveRejeitarDespesaSemDescricao() throws Exception{
+    void deveRejeitarDespesaSemDescricao() throws Exception {
 
         mockMvc.perform(
-                post("/despesas")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"descricao\":\"\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\":{\"id\":1}}")
+                        post("/despesas")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"descricao\":\"\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\":{\"id\":1}}")
 
-        ).andExpect(status().isBadRequest())
+                ).andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.erro").value("Erro de validação"))
                 .andExpect(jsonPath("$.mensagem").value("must not be blank"));
     }
 
     @Test
-    void deveRejeitarDespesaComValorNegativo() throws Exception{
+    void deveRejeitarDespesaComValorNegativo() throws Exception {
 
         mockMvc.perform(
-                post("/despesas")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"descricao\":\"conta de energia\", \"valor\": -150.50, \"data\":\"2026-11-07\", \"categoria\":{\"id\":1}}")
+                        post("/despesas")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"descricao\":\"conta de energia\", \"valor\": -150.50, \"data\":\"2026-11-07\", \"categoria\":{\"id\":1}}")
 
-        ).andExpect(status().isBadRequest())
+                ).andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.erro").value("Erro de validação"))
                 .andExpect(jsonPath("$.mensagem").value("must be greater than 0"));
     }
 
     @Test
-    void deveRejeitarDespesaSemData() throws Exception{
+    void deveRejeitarDespesaSemData() throws Exception {
 
         mockMvc.perform(
-                post("/despesas")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"descricao\":\"conta de energia\", \"valor\":150.50, \"data\":null, \"categoria\":{\"id\":1}}")
+                        post("/despesas")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"descricao\":\"conta de energia\", \"valor\":150.50, \"data\":null, \"categoria\":{\"id\":1}}")
 
-        ).andExpect(status().isBadRequest())
+                ).andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.erro").value("Erro de validação"))
-                .andExpect(jsonPath("$.mensagem").value("must not be null"));;
+                .andExpect(jsonPath("$.mensagem").value("must not be null"));
+        ;
     }
 
     @Test
-    void deveRejeitarDespesaSemCategoria() throws Exception{
+    void deveRejeitarDespesaSemCategoria() throws Exception {
 
         mockMvc.perform(
-                post("/despesas")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"descricao\":\"conta de energia\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\":null}")
+                        post("/despesas")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"descricao\":\"conta de energia\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\":null}")
 
-        ).andExpect(status().isBadRequest())
+                ).andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.erro").value("Erro de validação"))
-                .andExpect(jsonPath("$.mensagem").value("must not be null"));;
+                .andExpect(jsonPath("$.mensagem").value("must not be null"));
+        ;
     }
 
     @Test
-    void deveRejeitarDespesaSemValor() throws Exception{
+    void deveRejeitarDespesaSemValor() throws Exception {
         mockMvc.perform(
                 post("/despesas")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -203,7 +205,7 @@ public class DespesaControllerTest {
     }
 
     @Test
-    void deveRejeitarDespesaComValorZero() throws Exception{
+    void deveRejeitarDespesaComValorZero() throws Exception {
 
         mockMvc.perform(
                 post("/despesas")
@@ -214,35 +216,9 @@ public class DespesaControllerTest {
     }
 
     @Test
-    void deveRejeitarAtualizacaoComValorNegativo() throws Exception{
+    void deveRejeitarAtualizacaoComValorNegativo() throws Exception {
 
-      MvcResult resultado =  mockMvc.perform(
-                post("/despesas")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"descricao\":\"Conta de energia\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\":{\"id\":1}}")
-
-        ).andExpect(status().isCreated())
-              .andReturn();
-
-        String resposta = resultado.getResponse().getContentAsString();
-        Number idNumero = JsonPath.read(resposta, "$.id");
-        Long id = idNumero.longValue();
-
-        mockMvc.perform(
-                put("/despesas/{id}", id)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"descricao\":\"Conta de energia\", \"valor\":-100, \"data\":\"2026-11-07\", \"categoria\":{\"id\":1}}")
-
-        ).andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.status").value(400))
-                .andExpect(jsonPath("$.erro").value("Erro de validação"))
-                .andExpect(jsonPath("$.mensagem").value("must be greater than 0"));;
-    }
-
-    @Test
-    void deveRejeitarAtualizacaoSemDescricao() throws Exception{
-
-        MvcResult resultado =  mockMvc.perform(
+        MvcResult resultado = mockMvc.perform(
                         post("/despesas")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("{\"descricao\":\"Conta de energia\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\":{\"id\":1}}")
@@ -255,20 +231,21 @@ public class DespesaControllerTest {
         Long id = idNumero.longValue();
 
         mockMvc.perform(
-                put("/despesas/{id}", id)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"descricao\":\"\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\":{\"id\":1}}")
+                        put("/despesas/{id}", id)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"descricao\":\"Conta de energia\", \"valor\":-100, \"data\":\"2026-11-07\", \"categoria\":{\"id\":1}}")
 
-        ).andExpect(status().isBadRequest())
+                ).andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.erro").value("Erro de validação"))
-                .andExpect(jsonPath("$.mensagem").value("must not be blank"));;
+                .andExpect(jsonPath("$.mensagem").value("must be greater than 0"));
+        ;
     }
 
     @Test
-    void deveRejeitarAtualizacaoSemCategoria() throws Exception{
+    void deveRejeitarAtualizacaoSemDescricao() throws Exception {
 
-        MvcResult resultado =  mockMvc.perform(
+        MvcResult resultado = mockMvc.perform(
                         post("/despesas")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("{\"descricao\":\"Conta de energia\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\":{\"id\":1}}")
@@ -281,11 +258,38 @@ public class DespesaControllerTest {
         Long id = idNumero.longValue();
 
         mockMvc.perform(
-                put("/despesas/{id}", id)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"descricao\":\"Conta de energia\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\": null}")
+                        put("/despesas/{id}", id)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"descricao\":\"\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\":{\"id\":1}}")
 
-        ).andExpect(status().isBadRequest())
+                ).andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.erro").value("Erro de validação"))
+                .andExpect(jsonPath("$.mensagem").value("must not be blank"));
+        ;
+    }
+
+    @Test
+    void deveRejeitarAtualizacaoSemCategoria() throws Exception {
+
+        MvcResult resultado = mockMvc.perform(
+                        post("/despesas")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"descricao\":\"Conta de energia\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\":{\"id\":1}}")
+
+                ).andExpect(status().isCreated())
+                .andReturn();
+
+        String resposta = resultado.getResponse().getContentAsString();
+        Number idNumero = JsonPath.read(resposta, "$.id");
+        Long id = idNumero.longValue();
+
+        mockMvc.perform(
+                        put("/despesas/{id}", id)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"descricao\":\"Conta de energia\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\": null}")
+
+                ).andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.erro").value("Erro de validação"))
                 .andExpect(jsonPath("$.mensagem").value("must not be null"));
@@ -294,7 +298,7 @@ public class DespesaControllerTest {
     @Test
     void deveRejeitarAtualizacaoComCategoriaInexistente() throws Exception {
 
-        MvcResult resultado =  mockMvc.perform(
+        MvcResult resultado = mockMvc.perform(
                         post("/despesas")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("{\"descricao\":\"Conta de energia\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\":{\"id\":1}}")
@@ -307,20 +311,20 @@ public class DespesaControllerTest {
         Long id = idNumero.longValue();
 
         mockMvc.perform(
-                put("/despesas/{id}", id)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"descricao\":\"Conta de energia\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\":{\"id\" :999}}")
+                        put("/despesas/{id}", id)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"descricao\":\"Conta de energia\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\":{\"id\" :999}}")
 
-        ).andExpect(status().isNotFound())
+                ).andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value(404))
                 .andExpect(jsonPath("$.erro").value("não encontrado"))
                 .andExpect(jsonPath("$.mensagem").value("categoria não encontrada"));
     }
 
     @Test
-    void deveRejeitarAtualizacaoSemData() throws Exception{
+    void deveRejeitarAtualizacaoSemData() throws Exception {
 
-        MvcResult resultado =  mockMvc.perform(
+        MvcResult resultado = mockMvc.perform(
                         post("/despesas")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("{\"descricao\":\"Conta de energia\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\":{\"id\":1}}")
@@ -333,20 +337,21 @@ public class DespesaControllerTest {
         Long id = idNumero.longValue();
 
         mockMvc.perform(
-                put("/despesas/{id}", id)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"descricao\":\"Conta de energia\", \"valor\":150.50, \"data\": null, \"categoria\":{\"id\":1}}")
+                        put("/despesas/{id}", id)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"descricao\":\"Conta de energia\", \"valor\":150.50, \"data\": null, \"categoria\":{\"id\":1}}")
 
-        ).andExpect(status().isBadRequest())
+                ).andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.erro").value("Erro de validação"))
-                .andExpect(jsonPath("$.mensagem").value("must not be null"));;
+                .andExpect(jsonPath("$.mensagem").value("must not be null"));
+        ;
     }
 
     @Test
-    void deveRejeitarAtualizacaoSemValor() throws Exception{
+    void deveRejeitarAtualizacaoSemValor() throws Exception {
 
-        MvcResult resultado =  mockMvc.perform(
+        MvcResult resultado = mockMvc.perform(
                         post("/despesas")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("{\"descricao\":\"Conta de energia\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\":{\"id\":1}}")
@@ -367,9 +372,9 @@ public class DespesaControllerTest {
     }
 
     @Test
-    void deveRejeitarAtualizacaoComValorZero() throws Exception{
+    void deveRejeitarAtualizacaoComValorZero() throws Exception {
 
-        MvcResult resultado =  mockMvc.perform(
+        MvcResult resultado = mockMvc.perform(
                         post("/despesas")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("{\"descricao\":\"Conta de energia\", \"valor\":150.50, \"data\":\"2026-11-07\", \"categoria\":{\"id\":1}}")
@@ -390,18 +395,18 @@ public class DespesaControllerTest {
     }
 
     @Test
-    void deveRetornar404QuandoDespesaNaoExistir() throws Exception{
+    void deveRetornar404QuandoDespesaNaoExistir() throws Exception {
 
         mockMvc.perform(
-                get("/despesas/999")
-        ).andExpect(status().isNotFound())
+                        get("/despesas/999")
+                ).andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value(404))
                 .andExpect(jsonPath("$.erro").value("não encontrado"))
                 .andExpect(jsonPath("$.mensagem").value("Despesa não encontrada"));
     }
 
     @Test
-    void deveListarDespesaPorCategoria() throws Exception{
+    void deveListarDespesaPorCategoria() throws Exception {
 
         mockMvc.perform(
                 post("/despesas")
@@ -411,8 +416,8 @@ public class DespesaControllerTest {
         ).andExpect(status().isCreated());
 
         mockMvc.perform(
-                get("/despesas/categoria/1")
-        ).andExpect(status().isOk())
+                        get("/despesas/categoria/1")
+                ).andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].descricao").value("Conta de energia"))
                 .andExpect(jsonPath("$", hasSize(1)));
 
@@ -439,7 +444,7 @@ public class DespesaControllerTest {
     }
 
     @Test
-    void deveRetornar404QuandoCategoriaNaoExiste() throws Exception{
+    void deveRetornar404QuandoCategoriaNaoExiste() throws Exception {
 
         mockMvc.perform(
                         get("/despesas/categoria/999")
@@ -450,7 +455,7 @@ public class DespesaControllerTest {
     }
 
     @Test
-    void deveRetornarListaVaziaQuandoCategoriaNaoPossuiDespesa() throws Exception{
+    void deveRetornarListaVaziaQuandoCategoriaNaoPossuiDespesa() throws Exception {
 
         mockMvc.perform(
                         get("/despesas/categoria/1")
@@ -460,7 +465,7 @@ public class DespesaControllerTest {
     }
 
     @Test
-    void deveBuscarDespesaPorPeriodo() throws Exception{
+    void deveBuscarDespesaPorPeriodo() throws Exception {
 
         mockMvc.perform(
                 post("/despesas")
@@ -470,15 +475,15 @@ public class DespesaControllerTest {
         ).andExpect(status().isCreated());
 
         mockMvc.perform(
-                get("/despesas/periodo")
-                        .param("inicio", "2026-11-01")
-                        .param("fim", "2026-11-30")
-        ).andExpect(status().isOk())
-        .andExpect(jsonPath("$.content", hasSize(1)));
+                        get("/despesas/periodo")
+                                .param("inicio", "2026-11-01")
+                                .param("fim", "2026-11-30")
+                ).andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", hasSize(1)));
     }
 
     @Test
-    void deveRetornarListaVaziaQuandoNaoExistiremDespesasNoPeriodo() throws Exception{
+    void deveRetornarListaVaziaQuandoNaoExistiremDespesasNoPeriodo() throws Exception {
 
         mockMvc.perform(
                         get("/despesas/periodo")
@@ -489,17 +494,17 @@ public class DespesaControllerTest {
     }
 
     @Test
-    void deveRetornarErroQuandoDataInicialForPosteriorADataFinal() throws Exception{
+    void deveRetornarErroQuandoDataInicialForPosteriorADataFinal() throws Exception {
 
         mockMvc.perform(
-                        get("/despesas/periodo")
-                                .param("fim", "2026-11-01")
-                                .param("inicio", "2026-11-30")
-                ).andExpect(status().isBadRequest());
+                get("/despesas/periodo")
+                        .param("fim", "2026-11-01")
+                        .param("inicio", "2026-11-30")
+        ).andExpect(status().isBadRequest());
     }
 
     @Test
-    void deveRetornarApenasDespesasDentroDoPeriodo() throws Exception{
+    void deveRetornarApenasDespesasDentroDoPeriodo() throws Exception {
 
         mockMvc.perform(
                 post("/despesas")
@@ -524,7 +529,7 @@ public class DespesaControllerTest {
     }
 
     @Test
-    void deveIncluirDespesasNasDatasInicialEFinal() throws Exception{
+    void deveIncluirDespesasNasDatasInicialEFinal() throws Exception {
 
         mockMvc.perform(
                 post("/despesas")
@@ -549,7 +554,7 @@ public class DespesaControllerTest {
     }
 
     @Test
-    void deveBuscarDespesasPorFaixaDeValor() throws Exception{
+    void deveBuscarDespesasPorFaixaDeValor() throws Exception {
 
         mockMvc.perform(
                 post("/despesas")
@@ -574,7 +579,7 @@ public class DespesaControllerTest {
     }
 
     @Test
-    void deveIncluirDespesasNosLimitesDaFaixaDeValor() throws Exception{
+    void deveIncluirDespesasNosLimitesDaFaixaDeValor() throws Exception {
 
         mockMvc.perform(
                 post("/despesas")
@@ -599,7 +604,7 @@ public class DespesaControllerTest {
     }
 
     @Test
-    void deveRetornarListaVaziaQuandoNaoExistiremDespesasNaFaixaDeValor() throws Exception{
+    void deveRetornarListaVaziaQuandoNaoExistiremDespesasNaFaixaDeValor() throws Exception {
 
         mockMvc.perform(
                         get("/despesas/valor")
@@ -610,17 +615,17 @@ public class DespesaControllerTest {
     }
 
     @Test
-    void deveRetornarErroQuandoValorMinimoForMaiorQueMaximo() throws Exception{
+    void deveRetornarErroQuandoValorMinimoForMaiorQueMaximo() throws Exception {
 
         mockMvc.perform(
-                        get("/despesas/valor")
-                                .param("valorMaximo", "100.00")
-                                .param("valorMinimo", "500.00")
-                ).andExpect(status().isBadRequest());
+                get("/despesas/valor")
+                        .param("valorMaximo", "100.00")
+                        .param("valorMinimo", "500.00")
+        ).andExpect(status().isBadRequest());
     }
 
     @Test
-    void deveBuscarDespesasPorCategoriaEFaixaDeValor() throws Exception{
+    void deveBuscarDespesasPorCategoriaEFaixaDeValor() throws Exception {
 
         mockMvc.perform(
                 post("/despesas")
@@ -637,17 +642,17 @@ public class DespesaControllerTest {
         ).andExpect(status().isCreated());
 
         mockMvc.perform(
-                get("/despesas/categoria-valor")
-                        .param("categoriaId", "1")
-                        .param("valorMinimo", "100.00")
-                        .param("valorMaximo", "500.00")
+                        get("/despesas/categoria-valor")
+                                .param("categoriaId", "1")
+                                .param("valorMinimo", "100.00")
+                                .param("valorMaximo", "500.00")
 
-        ).andExpect(status().isOk())
+                ).andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(1)));
     }
 
     @Test
-    void deveRetornarListaVaziaQuandoNaoExistiremDespesasPorCategoriaEFaixaDeValor() throws Exception{
+    void deveRetornarListaVaziaQuandoNaoExistiremDespesasPorCategoriaEFaixaDeValor() throws Exception {
 
         mockMvc.perform(
                         get("/despesas/categoria-valor")
@@ -660,19 +665,19 @@ public class DespesaControllerTest {
     }
 
     @Test
-    void deveRetornarErroQuandoValorMinimoForMaiorQueMaximoNoFiltroCombinado() throws Exception{
+    void deveRetornarErroQuandoValorMinimoForMaiorQueMaximoNoFiltroCombinado() throws Exception {
 
         mockMvc.perform(
-                        get("/despesas/categoria-valor")
-                                .param("categoriaId", "1")
-                                .param("valorMinimo", "500.00")
-                                .param("valorMaximo", "100.00")
+                get("/despesas/categoria-valor")
+                        .param("categoriaId", "1")
+                        .param("valorMinimo", "500.00")
+                        .param("valorMaximo", "100.00")
 
-                ).andExpect(status().isBadRequest());
+        ).andExpect(status().isBadRequest());
     }
 
     @Test
-    void deveBuscarDespesasPorCategoriaEPeriodo() throws Exception{
+    void deveBuscarDespesasPorCategoriaEPeriodo() throws Exception {
 
         mockMvc.perform(
                 post("/despesas")
@@ -689,19 +694,19 @@ public class DespesaControllerTest {
         ).andExpect(status().isCreated());
 
         mockMvc.perform(
-                get("/despesas/categoria-periodo")
-                        .param("categoriaId", "1")
-                        .param("dataInicial", "2026-10-01")
-                        .param("dataFinal", "2026-10-31")
+                        get("/despesas/categoria-periodo")
+                                .param("categoriaId", "1")
+                                .param("dataInicial", "2026-10-01")
+                                .param("dataFinal", "2026-10-31")
 
-        ).andDo(print())
+                ).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(1)));
 
     }
 
     @Test
-    void deveRetornarListaVaziaQuandoNaoExistiremDespesasPorCategoriaEPeriodo() throws Exception{
+    void deveRetornarListaVaziaQuandoNaoExistiremDespesasPorCategoriaEPeriodo() throws Exception {
 
         mockMvc.perform(
                         get("/despesas/categoria-periodo")
@@ -714,7 +719,7 @@ public class DespesaControllerTest {
     }
 
     @Test
-    void deveIncluirDatasLimiteNoFiltroPorCategoriaEPeriodo() throws Exception{
+    void deveIncluirDatasLimiteNoFiltroPorCategoriaEPeriodo() throws Exception {
 
         mockMvc.perform(
                 post("/despesas")
@@ -741,7 +746,7 @@ public class DespesaControllerTest {
     }
 
     @Test
-    void deveRetornarErroQuandoDataInicialForPosteriorADataFinalNoFiltroCombinado() throws Exception{
+    void deveRetornarErroQuandoDataInicialForPosteriorADataFinalNoFiltroCombinado() throws Exception {
 
         mockMvc.perform(
                 get("/despesas/categoria-periodo")
@@ -752,7 +757,7 @@ public class DespesaControllerTest {
     }
 
     @Test
-    void devePaginarDespesasPorCategoriaEPeriodo() throws Exception{
+    void devePaginarDespesasPorCategoriaEPeriodo() throws Exception {
 
         mockMvc.perform(
                 post("/despesas")
@@ -789,7 +794,7 @@ public class DespesaControllerTest {
     }
 
     @Test
-    void deveRetornarSegundaPaginaNoFiltroPorCategoriaEPeriodo() throws Exception{
+    void deveRetornarSegundaPaginaNoFiltroPorCategoriaEPeriodo() throws Exception {
 
         mockMvc.perform(
                 post("/despesas")
@@ -826,7 +831,7 @@ public class DespesaControllerTest {
     }
 
     @Test
-    void deveOrdenarDespesasPorValor() throws Exception{
+    void deveOrdenarDespesasPorValor() throws Exception {
 
         mockMvc.perform(
                 post("/despesas")
@@ -860,7 +865,7 @@ public class DespesaControllerTest {
     }
 
     @Test
-    void deveOrdenarDespesasPorData() throws Exception{
+    void deveOrdenarDespesasPorData() throws Exception {
 
         mockMvc.perform(
                 post("/despesas")
