@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 
 @RestController
 @RequestMapping("/receitas")
@@ -49,5 +51,11 @@ public class ReceitaController {
     public void excluir(@PathVariable Long id){
 
         receitaService.excluirPorId(id);
+    }
+
+    @GetMapping("/periodo")
+    public Page<Receita> listarPeriodo(LocalDate inicio, LocalDate fim, Pageable pageable){
+
+        return receitaService.listarPorPeriodo(inicio, fim, pageable);
     }
 }
