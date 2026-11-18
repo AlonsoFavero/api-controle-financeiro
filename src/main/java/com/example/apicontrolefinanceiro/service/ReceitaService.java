@@ -69,4 +69,9 @@ public class ReceitaService {
 
         return receitaRepository.findByValorBetweenAndDataBetween(valorMinimo, valorMaximo, inicio, fim, pageable);
     }
+
+    public BigDecimal somarReceitasPorPeriodo(LocalDate inicio, LocalDate fim){
+
+        return receitaRepository.somarReceitasPorPeriodo(inicio, fim);
+    }
 }
