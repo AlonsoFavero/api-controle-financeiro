@@ -1,17 +1,24 @@
+
 package com.example.apicontrolefinanceiro.model;
 
-
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 
+@Schema(description = "Representa o resumo financeiro de um período")
 public class ResumoFinanceiro {
 
-private BigDecimal totalReceitas;
-private BigDecimal totalDespesas;
-private BigDecimal saldo;
+    @Schema(description = "Valor total das receitas", example = "5000.00")
+    private BigDecimal totalReceitas;
 
-public ResumoFinanceiro(){
+    @Schema(description = "Valor total das despesas", example = "2000.00")
+    private BigDecimal totalDespesas;
 
-}
+    @Schema(description = "Saldo resultante da diferença entre receitas e despesas", example = "3000.00")
+    private BigDecimal saldo;
+
+    public ResumoFinanceiro(){
+
+    }
 
     public ResumoFinanceiro(BigDecimal totalReceitas, BigDecimal totalDespesas, BigDecimal saldo) {
         this.totalReceitas = totalReceitas;
