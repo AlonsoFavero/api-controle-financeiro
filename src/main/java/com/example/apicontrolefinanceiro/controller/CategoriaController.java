@@ -9,9 +9,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
 
+@Tag(name = "Categorias", description = "Gerenciamento de categorias")
 @RestController
 @RequestMapping("/categorias")
 public class CategoriaController {

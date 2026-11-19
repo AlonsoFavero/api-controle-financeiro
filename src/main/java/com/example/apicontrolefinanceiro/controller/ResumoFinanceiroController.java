@@ -4,6 +4,7 @@ package com.example.apicontrolefinanceiro.controller;
 import com.example.apicontrolefinanceiro.model.ResumoFinanceiro;
 import com.example.apicontrolefinanceiro.service.ResumoFinanceiroService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 
+@Tag(name = "Resumo Financeiro", description = "Consultas de resumo financeiro")
 @RestController
 @RequestMapping("/resumo")
 public class ResumoFinanceiroController {

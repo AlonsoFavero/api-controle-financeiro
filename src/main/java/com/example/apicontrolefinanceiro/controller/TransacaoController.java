@@ -9,6 +9,7 @@ import com.example.apicontrolefinanceiro.model.TipoTransacao;
 import com.example.apicontrolefinanceiro.model.Transacao;
 import com.example.apicontrolefinanceiro.service.TransacaoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +21,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+@Tag(name = "Transações", description = "Gerenciamento de transações")
 @RestController
 @RequestMapping("/transacoes")
 public class TransacaoController {

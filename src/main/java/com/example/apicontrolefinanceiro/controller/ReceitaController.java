@@ -3,6 +3,7 @@ package com.example.apicontrolefinanceiro.controller;
 import com.example.apicontrolefinanceiro.model.Receita;
 import com.example.apicontrolefinanceiro.service.ReceitaService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-
+@Tag(name = "Receitas", description = "Gerenciamento de receitas")
 @RestController
 @RequestMapping("/receitas")
 public class ReceitaController {
