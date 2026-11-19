@@ -1,5 +1,7 @@
+
 package com.example.apicontrolefinanceiro.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,16 +14,24 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
+@Schema(description = "Representa uma receita financeira")
 public class Receita {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(description = "Identificador da receita", example = "1")
     private Long id;
+
+    @Schema(description = "Descrição da receita", example = "Salário mensal")
     @NotBlank
     private String descricao;
+
+    @Schema(description = "Valor da receita", example = "5000.00")
     @NotNull
     @Positive
     private BigDecimal valor;
+
+    @Schema(description = "Data em que a receita foi recebida", example = "2026-11-19")
     private LocalDate data;
 
     public Receita() {
