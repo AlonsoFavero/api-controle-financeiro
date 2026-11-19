@@ -4,9 +4,7 @@ package com.example.apicontrolefinanceiro.controller;
 import com.example.apicontrolefinanceiro.dto.ResumoFinanceiroDTO;
 import com.example.apicontrolefinanceiro.dto.TransacaoRequestDTO;
 import com.example.apicontrolefinanceiro.dto.TransacaoResponseDTO;
-import com.example.apicontrolefinanceiro.model.Categoria;
 import com.example.apicontrolefinanceiro.model.TipoTransacao;
-import com.example.apicontrolefinanceiro.model.Transacao;
 import com.example.apicontrolefinanceiro.service.TransacaoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -17,7 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -28,25 +25,23 @@ import java.util.List;
 @RequestMapping("/transacoes")
 public class TransacaoController {
 
-    private TransacaoService transacaoService;
+    private final TransacaoService transacaoService;
 
     public TransacaoController(TransacaoService transacaoService) {
         this.transacaoService = transacaoService;
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Cadastra uma transação",
             description = "Registra uma nova transação com os dados informados")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Transação cadastrada com sucesso"),
+            @ApiResponse(responseCode = "201", description = "Transação cadastrada com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos"),
             @ApiResponse(responseCode = "404", description = "Categoria não encontrada")
     })
     public TransacaoResponseDTO salvar(@Valid @RequestBody TransacaoRequestDTO dados) {
-
-        Transacao transacao = converterParaEntidade(dados);
-
-        return new TransacaoResponseDTO(transacaoService.salvar(transacao));
+        return transacaoService.salvar(dados);
     }
 
     @GetMapping
@@ -54,9 +49,7 @@ public class TransacaoController {
             description = "Retorna as transações cadastradas com paginação")
     @ApiResponse(responseCode = "200", description = "Transações listadas com sucesso")
     public Page<TransacaoResponseDTO> listar(Pageable pageable) {
-
-        return transacaoService.listarPaginado(pageable)
-                .map(transacao -> new TransacaoResponseDTO(transacao));
+        return transacaoService.listarPaginado(pageable);
     }
 
     @GetMapping("/{id}")
@@ -67,11 +60,7 @@ public class TransacaoController {
             @ApiResponse(responseCode = "404", description = "Transação não encontrada")
     })
     public TransacaoResponseDTO buscarPorId(@PathVariable Long id) {
-
-        return transacaoService.buscarPorId(id)
-                .map(transacao -> new TransacaoResponseDTO(transacao))
-                .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return transacaoService.buscarPorId(id);
     }
 
     @DeleteMapping("/{id}")
@@ -83,7 +72,6 @@ public class TransacaoController {
             @ApiResponse(responseCode = "404", description = "Transação não encontrada")
     })
     public void excluirPorId(@PathVariable Long id) {
-
         transacaoService.excluirPorId(id);
     }
 
@@ -95,25 +83,10 @@ public class TransacaoController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos"),
             @ApiResponse(responseCode = "404", description = "Transação ou categoria não encontrada")
     })
-    public TransacaoResponseDTO atualizar(@PathVariable Long id, @Valid @RequestBody TransacaoRequestDTO dados) {
-
-        Transacao transacao = converterParaEntidade(dados);
-
-        return new TransacaoResponseDTO(transacaoService.atualizar(id, transacao));
-    }
-
-    private Transacao converterParaEntidade(TransacaoRequestDTO dados) {
-
-        Transacao transacao = new Transacao();
-
-        transacao.setDescricao(dados.getDescricao());
-        transacao.setValor(dados.getValor());
-        transacao.setTipo(dados.getTipo());
-        transacao.setData(dados.getData());
-        Categoria categoria = transacaoService.buscarCategoriaPorId(dados.getCategoriaId());
-        transacao.setCategoria(categoria);
-
-        return transacao;
+    public TransacaoResponseDTO atualizar(
+            @PathVariable Long id,
+            @Valid @RequestBody TransacaoRequestDTO dados) {
+        return transacaoService.atualizar(id, dados);
     }
 
     @GetMapping("/saldo")
@@ -121,7 +94,6 @@ public class TransacaoController {
             description = "Retorna o saldo financeiro considerando receitas e despesas")
     @ApiResponse(responseCode = "200", description = "Saldo calculado com sucesso")
     public BigDecimal calculaSaldo() {
-
         return transacaoService.calcularSaldo();
     }
 
@@ -130,11 +102,7 @@ public class TransacaoController {
             description = "Retorna as transações filtradas pelo tipo informado")
     @ApiResponse(responseCode = "200", description = "Transações listadas com sucesso")
     public List<TransacaoResponseDTO> buscarTipo(@PathVariable TipoTransacao tipo) {
-
-        return transacaoService.buscarPorTipo(tipo)
-                .stream()
-                .map(transacao -> new TransacaoResponseDTO(transacao))
-                .toList();
+        return transacaoService.buscarPorTipo(tipo);
     }
 
     @GetMapping("/receitas/total")
@@ -142,7 +110,6 @@ public class TransacaoController {
             description = "Retorna a soma dos valores de todas as receitas")
     @ApiResponse(responseCode = "200", description = "Total de receitas calculado com sucesso")
     public BigDecimal calcularReceitas() {
-
         return transacaoService.calcularTotalReceitas();
     }
 
@@ -151,7 +118,6 @@ public class TransacaoController {
             description = "Retorna a soma dos valores de todas as despesas")
     @ApiResponse(responseCode = "200", description = "Total de despesas calculado com sucesso")
     public BigDecimal calcularDespesas() {
-
         return transacaoService.calcularTotalDespesas();
     }
 
@@ -159,20 +125,19 @@ public class TransacaoController {
     @Operation(summary = "Filtra transações por período",
             description = "Retorna as transações registradas entre as datas inicial e final informadas")
     @ApiResponse(responseCode = "200", description = "Transações filtradas com sucesso")
-    public List<TransacaoResponseDTO> buscarPeriodo(@RequestParam LocalDate inicio, @RequestParam LocalDate fim) {
-
-        return transacaoService.buscarPorPeriodo(inicio, fim)
-                .stream()
-                .map(transacao -> new TransacaoResponseDTO(transacao))
-                .toList();
+    public List<TransacaoResponseDTO> buscarPeriodo(
+            @RequestParam LocalDate inicio,
+            @RequestParam LocalDate fim) {
+        return transacaoService.buscarPorPeriodo(inicio, fim);
     }
 
     @GetMapping("/resumo")
     @Operation(summary = "Gera resumo financeiro por período",
             description = "Retorna o resumo financeiro das transações entre as datas informadas")
     @ApiResponse(responseCode = "200", description = "Resumo financeiro gerado com sucesso")
-    public ResumoFinanceiroDTO resumirPorPeriodo(@RequestParam LocalDate inicio, LocalDate fim) {
-
+    public ResumoFinanceiroDTO resumirPorPeriodo(
+            @RequestParam LocalDate inicio,
+            @RequestParam LocalDate fim) {
         return transacaoService.calcularResumoPorPeriodo(inicio, fim);
     }
 
@@ -181,22 +146,16 @@ public class TransacaoController {
             description = "Retorna as transações ordenadas da data mais recente para a mais antiga")
     @ApiResponse(responseCode = "200", description = "Transações listadas com sucesso")
     public List<TransacaoResponseDTO> listarPorData() {
-
-        return transacaoService.listarPorDataDesc()
-                .stream()
-                .map(transacao -> new TransacaoResponseDTO(transacao))
-                .toList();
+        return transacaoService.listarPorDataDesc();
     }
 
     @GetMapping("/valor")
     @Operation(summary = "Filtra transações por faixa de valor",
             description = "Retorna as transações com valores entre o mínimo e o máximo informados")
     @ApiResponse(responseCode = "200", description = "Transações filtradas com sucesso")
-    public List<TransacaoResponseDTO> buscarPorValor(@RequestParam BigDecimal valorMinimo, @RequestParam BigDecimal valorMaximo) {
-
-        return transacaoService.buscarPorFaixaDeValor(valorMinimo, valorMaximo)
-                .stream()
-                .map(transacao -> new TransacaoResponseDTO(transacao))
-                .toList();
+    public List<TransacaoResponseDTO> buscarPorValor(
+            @RequestParam BigDecimal valorMinimo,
+            @RequestParam BigDecimal valorMaximo) {
+        return transacaoService.buscarPorFaixaDeValor(valorMinimo, valorMaximo);
     }
 }
