@@ -1,9 +1,11 @@
+
 package com.example.apicontrolefinanceiro.controller;
 
 import com.example.apicontrolefinanceiro.dto.CategoriaRequestDTO;
 import com.example.apicontrolefinanceiro.dto.CategoriaResponseDTO;
 import com.example.apicontrolefinanceiro.model.Categoria;
 import com.example.apicontrolefinanceiro.service.CategoriaService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -22,23 +24,25 @@ public class CategoriaController {
     }
 
     @GetMapping
+    @Operation(summary = "Lista as categorias", description = "Retorna todas as categorias cadastradas")
     public List<CategoriaResponseDTO> listar(){
 
-           return categoriaService.listar()
+        return categoriaService.listar()
                 .stream()
                 .map(categoria -> {
                     CategoriaResponseDTO dto = new CategoriaResponseDTO();
 
-                       dto.setId(categoria.getId());
-                       dto.setNome(categoria.getNome());
+                    dto.setId(categoria.getId());
+                    dto.setNome(categoria.getNome());
 
                     return dto;
-                        })
-                   .toList();
+                })
+                .toList();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Cadastra uma categoria", description = "Recebe os dados e registra uma nova categoria")
     public CategoriaResponseDTO salvar(@RequestBody @Valid CategoriaRequestDTO dados){
 
         Categoria categoria = new Categoria();
@@ -55,6 +59,7 @@ public class CategoriaController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Busca uma categoria por ID", description = "Retorna os dados de uma categoria específica")
     public CategoriaResponseDTO buscarPorId(@PathVariable Long id){
 
         Categoria categoriaBuscada = categoriaService.buscarPorId(id);
@@ -68,21 +73,23 @@ public class CategoriaController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Atualiza uma categoria", description = "Atualiza o nome de uma categoria existente pelo ID")
     public CategoriaResponseDTO atualizar(@PathVariable Long id, @RequestBody @Valid CategoriaRequestDTO dados){
 
-       Categoria categoriaAtualizada = categoriaService.atualizar(id, dados.getNome());
+        Categoria categoriaAtualizada = categoriaService.atualizar(id, dados.getNome());
 
-       CategoriaResponseDTO dto = new CategoriaResponseDTO();
+        CategoriaResponseDTO dto = new CategoriaResponseDTO();
 
-       dto.setId(categoriaAtualizada.getId());
-       dto.setNome(categoriaAtualizada.getNome());
+        dto.setId(categoriaAtualizada.getId());
+        dto.setNome(categoriaAtualizada.getNome());
 
-       return dto;
+        return dto;
 
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Exclui uma categoria", description = "Remove uma categoria pelo ID, desde que não esteja vinculada a despesas")
     public void excluir(@PathVariable Long id){
 
         categoriaService.excluir(id);
