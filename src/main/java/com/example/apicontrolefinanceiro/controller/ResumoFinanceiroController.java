@@ -4,6 +4,8 @@ package com.example.apicontrolefinanceiro.controller;
 import com.example.apicontrolefinanceiro.model.ResumoFinanceiro;
 import com.example.apicontrolefinanceiro.service.ResumoFinanceiroService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +30,11 @@ public class ResumoFinanceiroController {
             summary = "Gera um resumo financeiro",
             description = "Retorna o resumo financeiro do período entre as datas inicial e final informadas"
     )
-    public ResumoFinanceiro gerarResumo(@RequestParam LocalDate inicio, @RequestParam LocalDate fim){
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Resumo financeiro gerado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Parâmetros ou período inválidos")
+    })
+    public ResumoFinanceiro gerarResumo(@RequestParam LocalDate inicio, @RequestParam LocalDate fim) {
 
         return resumoFinanceiroService.gerarResumo(inicio, fim);
     }
