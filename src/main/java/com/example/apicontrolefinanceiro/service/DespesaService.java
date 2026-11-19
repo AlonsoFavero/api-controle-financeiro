@@ -1,13 +1,18 @@
+
 package com.example.apicontrolefinanceiro.service;
 
+import com.example.apicontrolefinanceiro.dto.CategoriaResponseDTO;
+import com.example.apicontrolefinanceiro.dto.DespesaRequestDTO;
+import com.example.apicontrolefinanceiro.dto.DespesaResponseDTO;
+import com.example.apicontrolefinanceiro.model.Categoria;
 import com.example.apicontrolefinanceiro.model.Despesa;
+import com.example.apicontrolefinanceiro.repository.CategoriaRepository;
 import com.example.apicontrolefinanceiro.repository.DespesaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import com.example.apicontrolefinanceiro.repository.CategoriaRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -19,92 +24,122 @@ public class DespesaService {
     private final DespesaRepository despesaRepository;
     private final CategoriaRepository categoriaRepository;
 
-    public DespesaService(DespesaRepository despesaRepository, CategoriaRepository categoriaRepository){
-
+    public DespesaService(DespesaRepository despesaRepository,
+                          CategoriaRepository categoriaRepository) {
         this.despesaRepository = despesaRepository;
         this.categoriaRepository = categoriaRepository;
     }
 
-    public Page<Despesa> listar(Pageable pageable){
-
-        return despesaRepository.findAll(pageable);
+    public Page<DespesaResponseDTO> listar(Pageable pageable) {
+        return despesaRepository.findAll(pageable).map(this::converterParaDTO);
     }
 
-    public List<Despesa> buscarPorCategoria(Long categoriaId) {
+    public List<DespesaResponseDTO> buscarPorCategoria(Long categoriaId) {
 
-        if (!categoriaRepository.existsById(categoriaId)) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "categoria não encontrada"
-            );
-        }
+        buscarCategoria(categoriaId);
 
-        return despesaRepository.findByCategoriaId(categoriaId);
+        return despesaRepository.findByCategoriaId(categoriaId)
+                .stream()
+                .map(this::converterParaDTO)
+                .toList();
     }
 
-    public Despesa salvar(Despesa despesa){
+    public DespesaResponseDTO salvar(DespesaRequestDTO dados) {
 
-      Long categoriaId = despesa.getCategoria().getId();
-
-      if(!categoriaRepository.existsById(categoriaId)){
-          throw new ResponseStatusException(
-                  HttpStatus.NOT_FOUND, "categoria não encontrada"
-          );
-      }
-
-      return despesaRepository.save(despesa);
-    }
-
-    public Despesa buscarPorId(Long id){
-
-        return despesaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Despesa não encontrada"));
-    }
-
-    public Despesa atualizar(Long id, Despesa dados){
-
-        Despesa despesa = buscarPorId(id);
+        Despesa despesa = new Despesa();
         despesa.setDescricao(dados.getDescricao());
         despesa.setValor(dados.getValor());
         despesa.setData(dados.getData());
-        Long categoriaId = dados.getCategoria().getId();
+        despesa.setCategoria(buscarCategoria(dados.getCategoriaId()));
 
-        if(!categoriaRepository.existsById(categoriaId)){
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "categoria não encontrada"
-            );
-        }
-
-        despesa.setCategoria(dados.getCategoria());
-
-        return despesaRepository.save(despesa);
+        return converterParaDTO(despesaRepository.save(despesa));
     }
 
-    public void excluir(Long id){
+    public DespesaResponseDTO buscarPorId(Long id) {
+        return converterParaDTO(buscarEntidadePorId(id));
+    }
 
-        Despesa despesa = buscarPorId(id);
+    public DespesaResponseDTO atualizar(Long id, DespesaRequestDTO dados) {
+
+        Despesa despesa = buscarEntidadePorId(id);
+
+        despesa.setDescricao(dados.getDescricao());
+        despesa.setValor(dados.getValor());
+        despesa.setData(dados.getData());
+        despesa.setCategoria(buscarCategoria(dados.getCategoriaId()));
+
+        return converterParaDTO(despesaRepository.save(despesa));
+    }
+
+    public void excluir(Long id) {
+        Despesa despesa = buscarEntidadePorId(id);
         despesaRepository.delete(despesa);
     }
 
-    public Page<Despesa> buscarPorPeriodo(LocalDate inicio, LocalDate fim, Pageable pageable){
+    public Page<DespesaResponseDTO> buscarPorPeriodo(
+            LocalDate inicio, LocalDate fim, Pageable pageable) {
 
-        return despesaRepository.findByDataBetween(inicio, fim, pageable);
+        return despesaRepository.findByDataBetween(inicio, fim, pageable)
+                .map(this::converterParaDTO);
     }
 
-    public Page<Despesa> buscarPorFaixaDeValor(BigDecimal valorMinimo, BigDecimal valorMaximo, Pageable pageable){
+    public Page<DespesaResponseDTO> buscarPorFaixaDeValor(
+            BigDecimal valorMinimo, BigDecimal valorMaximo, Pageable pageable) {
 
-        return despesaRepository.findByValorBetween(valorMinimo, valorMaximo, pageable);
+        return despesaRepository.findByValorBetween(valorMinimo, valorMaximo, pageable)
+                .map(this::converterParaDTO);
     }
 
-    public Page<Despesa> buscarPorCategoriaEFaixaDeValor(Long categoriaId, BigDecimal valorMinimo, BigDecimal valorMaximo, Pageable pageable){
+    public Page<DespesaResponseDTO> buscarPorCategoriaEFaixaDeValor(
+            Long categoriaId, BigDecimal valorMinimo,
+            BigDecimal valorMaximo, Pageable pageable) {
 
-        return despesaRepository.findByCategoriaIdAndValorBetween(categoriaId , valorMinimo, valorMaximo, pageable);
+        buscarCategoria(categoriaId);
+
+        return despesaRepository.findByCategoriaIdAndValorBetween(
+                        categoriaId, valorMinimo, valorMaximo, pageable)
+                .map(this::converterParaDTO);
     }
 
-    public Page<Despesa> buscarPorCategoriaEPeriodo(Long categoriaId, LocalDate dataInicial, LocalDate dataFinal, Pageable pageable){
+    public Page<DespesaResponseDTO> buscarPorCategoriaEPeriodo(
+            Long categoriaId, LocalDate dataInicial,
+            LocalDate dataFinal, Pageable pageable) {
 
-        return despesaRepository.findByCategoriaIdAndDataBetween(categoriaId, dataInicial, dataFinal, pageable);
+        buscarCategoria(categoriaId);
+
+        return despesaRepository.findByCategoriaIdAndDataBetween(
+                        categoriaId, dataInicial, dataFinal, pageable)
+                .map(this::converterParaDTO);
     }
-    public BigDecimal somarDespesasPorPeriodo(LocalDate inicio, LocalDate fim){
 
+    public BigDecimal somarDespesasPorPeriodo(LocalDate inicio, LocalDate fim) {
         return despesaRepository.somarDespesasPorPeriodo(inicio, fim);
+    }
+
+    private Despesa buscarEntidadePorId(Long id) {
+        return despesaRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Despesa não encontrada"));
+    }
+
+    private Categoria buscarCategoria(Long categoriaId) {
+        return categoriaRepository.findById(categoriaId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "categoria não encontrada"));
+    }
+
+    private DespesaResponseDTO converterParaDTO(Despesa despesa) {
+
+        CategoriaResponseDTO categoriaDTO = new CategoriaResponseDTO();
+        categoriaDTO.setId(despesa.getCategoria().getId());
+        categoriaDTO.setNome(despesa.getCategoria().getNome());
+
+        return new DespesaResponseDTO(
+                despesa.getId(),
+                despesa.getDescricao(),
+                despesa.getValor(),
+                despesa.getData(),
+                categoriaDTO
+        );
     }
 }
