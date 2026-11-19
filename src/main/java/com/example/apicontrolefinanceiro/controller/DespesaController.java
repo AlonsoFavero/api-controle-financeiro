@@ -1,18 +1,19 @@
 
 package com.example.apicontrolefinanceiro.controller;
 
-import com.example.apicontrolefinanceiro.model.Despesa;
+import com.example.apicontrolefinanceiro.dto.DespesaRequestDTO;
+import com.example.apicontrolefinanceiro.dto.DespesaResponseDTO;
 import com.example.apicontrolefinanceiro.service.DespesaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -32,7 +33,7 @@ public class DespesaController {
     @GetMapping
     @Operation(summary = "Lista de todas as despesas", description = "Retorna as despesas cadastradas com paginação")
     @ApiResponse(responseCode = "200", description = "Despesas listadas com sucesso")
-    public Page<Despesa> listar(Pageable pageable) {
+    public Page<DespesaResponseDTO> listar(Pageable pageable) {
         return despesaService.listar(pageable);
     }
 
@@ -44,8 +45,8 @@ public class DespesaController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos"),
             @ApiResponse(responseCode = "404", description = "Categoria não encontrada")
     })
-    public Despesa salvar(@RequestBody @Valid Despesa despesa) {
-        return despesaService.salvar(despesa);
+    public DespesaResponseDTO salvar(@RequestBody @Valid DespesaRequestDTO dados) {
+        return despesaService.salvar(dados);
     }
 
     @GetMapping("/{id}")
@@ -54,7 +55,7 @@ public class DespesaController {
             @ApiResponse(responseCode = "200", description = "Despesa encontrada"),
             @ApiResponse(responseCode = "404", description = "Despesa não encontrada")
     })
-    public Despesa buscarPorId(@PathVariable Long id) {
+    public DespesaResponseDTO buscarPorId(@PathVariable Long id) {
         return despesaService.buscarPorId(id);
     }
 
@@ -65,7 +66,9 @@ public class DespesaController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos"),
             @ApiResponse(responseCode = "404", description = "Despesa ou categoria não encontrada")
     })
-    public Despesa atualizar(@PathVariable Long id, @RequestBody @Valid Despesa dados) {
+    public DespesaResponseDTO atualizar(
+            @PathVariable Long id,
+            @RequestBody @Valid DespesaRequestDTO dados) {
         return despesaService.atualizar(id, dados);
     }
 
@@ -83,7 +86,7 @@ public class DespesaController {
     @GetMapping("/categoria/{categoriaId}")
     @Operation(summary = "Lista despesas por categoria", description = "Retorna todas as despesas associadas a uma categoria específica")
     @ApiResponse(responseCode = "200", description = "Despesas listadas com sucesso")
-    public List<Despesa> listarPorCategoria(@PathVariable Long categoriaId) {
+    public List<DespesaResponseDTO> listarPorCategoria(@PathVariable Long categoriaId) {
         return despesaService.buscarPorCategoria(categoriaId);
     }
 
@@ -93,10 +96,14 @@ public class DespesaController {
             @ApiResponse(responseCode = "200", description = "Despesas filtradas com sucesso"),
             @ApiResponse(responseCode = "400", description = "Intervalo de datas inválido")
     })
-    public Page<Despesa> listarPorPeriodo(@RequestParam LocalDate inicio, @RequestParam LocalDate fim, Pageable pageable) {
+    public Page<DespesaResponseDTO> listarPorPeriodo(
+            @RequestParam LocalDate inicio,
+            @RequestParam LocalDate fim,
+            Pageable pageable) {
 
         if (inicio.isAfter(fim)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Data inicial não pode ser posterior a data final");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Data inicial não pode ser posterior a data final");
         }
 
         return despesaService.buscarPorPeriodo(inicio, fim, pageable);
@@ -108,10 +115,14 @@ public class DespesaController {
             @ApiResponse(responseCode = "200", description = "Despesas filtradas com sucesso"),
             @ApiResponse(responseCode = "400", description = "Faixa de valores inválida")
     })
-    public Page<Despesa> listarPorFaixaDeValor(@RequestParam BigDecimal valorMinimo, @RequestParam BigDecimal valorMaximo, Pageable pageable) {
+    public Page<DespesaResponseDTO> listarPorFaixaDeValor(
+            @RequestParam BigDecimal valorMinimo,
+            @RequestParam BigDecimal valorMaximo,
+            Pageable pageable) {
 
         if (valorMinimo.compareTo(valorMaximo) > 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "valor minimo não pode ser maior que o valor maximo");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "valor minimo não pode ser maior que o valor maximo");
         }
 
         return despesaService.buscarPorFaixaDeValor(valorMinimo, valorMaximo, pageable);
@@ -124,13 +135,19 @@ public class DespesaController {
             @ApiResponse(responseCode = "400", description = "Faixa de valores inválida"),
             @ApiResponse(responseCode = "404", description = "Categoria não encontrada")
     })
-    public Page<Despesa> buscarPorCategoriaEFaixaDeValor(@RequestParam Long categoriaId, @RequestParam BigDecimal valorMinimo, @RequestParam BigDecimal valorMaximo, Pageable pageable) {
+    public Page<DespesaResponseDTO> buscarPorCategoriaEFaixaDeValor(
+            @RequestParam Long categoriaId,
+            @RequestParam BigDecimal valorMinimo,
+            @RequestParam BigDecimal valorMaximo,
+            Pageable pageable) {
 
         if (valorMinimo.compareTo(valorMaximo) > 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "valor minimo não pode ser maior que o valor maximo");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "valor minimo não pode ser maior que o valor maximo");
         }
 
-        return despesaService.buscarPorCategoriaEFaixaDeValor(categoriaId, valorMinimo, valorMaximo, pageable);
+        return despesaService.buscarPorCategoriaEFaixaDeValor(
+                categoriaId, valorMinimo, valorMaximo, pageable);
     }
 
     @GetMapping("/categoria-periodo")
@@ -140,12 +157,18 @@ public class DespesaController {
             @ApiResponse(responseCode = "400", description = "Intervalo de datas inválido"),
             @ApiResponse(responseCode = "404", description = "Categoria não encontrada")
     })
-    public Page<Despesa> buscarPorCategoriaEPeriodo(@RequestParam Long categoriaId, @RequestParam LocalDate dataInicial, @RequestParam LocalDate dataFinal, Pageable pageable) {
+    public Page<DespesaResponseDTO> buscarPorCategoriaEPeriodo(
+            @RequestParam Long categoriaId,
+            @RequestParam LocalDate dataInicial,
+            @RequestParam LocalDate dataFinal,
+            Pageable pageable) {
 
         if (dataInicial.isAfter(dataFinal)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "data inicial não pode ser posterior a data final");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "data inicial não pode ser posterior a data final");
         }
 
-        return despesaService.buscarPorCategoriaEPeriodo(categoriaId, dataInicial, dataFinal, pageable);
+        return despesaService.buscarPorCategoriaEPeriodo(
+                categoriaId, dataInicial, dataFinal, pageable);
     }
 }
