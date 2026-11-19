@@ -1,5 +1,7 @@
+
 package com.example.apicontrolefinanceiro.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -9,24 +11,34 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
+@Schema(description = "Representa uma despesa financeira")
 public class Despesa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(description = "Identificador da despesa", example = "1")
     private Long id;
+
+    @Schema(description = "Descrição da despesa", example = "Conta de energia")
     @NotBlank
     private String descricao;
+
+    @Schema(description = "Valor da despesa", example = "250.00")
     @NotNull
     @Positive
     private BigDecimal valor;
+
+    @Schema(description = "Data da despesa", example = "2026-11-19")
     @NotNull
     private LocalDate data;
+
     @ManyToOne
     @JoinColumn(name = "categoria_id")
     @NotNull
+    @Schema(description = "Categoria associada à despesa")
     private Categoria categoria;
 
-    public  Despesa(){
+    public Despesa(){
 
     }
 
