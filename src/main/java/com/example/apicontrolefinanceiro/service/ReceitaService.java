@@ -4,10 +4,13 @@ package com.example.apicontrolefinanceiro.service;
 import com.example.apicontrolefinanceiro.dto.ReceitaRequestDTO;
 import com.example.apicontrolefinanceiro.dto.ReceitaResponseDTO;
 import com.example.apicontrolefinanceiro.model.Receita;
+import com.example.apicontrolefinanceiro.model.Usuario;
 import com.example.apicontrolefinanceiro.repository.ReceitaRepository;
+import com.example.apicontrolefinanceiro.repository.UsuarioRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -17,9 +20,12 @@ import java.time.LocalDate;
 @Service
 public class ReceitaService {
 
+    private final UsuarioRepository usuarioRepository;
     private final ReceitaRepository receitaRepository;
 
-    public ReceitaService(ReceitaRepository receitaRepository) {
+    public ReceitaService(ReceitaRepository receitaRepository,
+                          UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
         this.receitaRepository = receitaRepository;
     }
 
@@ -28,6 +34,7 @@ public class ReceitaService {
         receita.setDescricao(dados.getDescricao());
         receita.setData(dados.getData());
         receita.setValor(dados.getValor());
+        receita.setUsuario(buscarUsuarioAutenticado());
 
         return converterParaDTO(receitaRepository.save(receita));
     }
@@ -87,6 +94,15 @@ public class ReceitaService {
         return receitaRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Receita não encontrada"));
+    }
+
+    private Usuario buscarUsuarioAutenticado(){
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        return usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "email não encontrado"));
     }
 
     private ReceitaResponseDTO converterParaDTO(Receita receita) {
