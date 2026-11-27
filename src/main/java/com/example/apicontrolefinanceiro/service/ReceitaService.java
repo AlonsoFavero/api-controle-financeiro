@@ -66,14 +66,14 @@ public class ReceitaService {
     public Page<ReceitaResponseDTO> listarPorPeriodo(
             LocalDate inicio, LocalDate fim, Pageable pageable) {
 
-        return receitaRepository.findByDataBetween(inicio, fim, pageable)
+        return receitaRepository.findByDataBetweenAndUsuarioId(inicio, fim, buscarUsuarioAutenticado().getId(), pageable)
                 .map(this::converterParaDTO);
     }
 
     public Page<ReceitaResponseDTO> listarPorValor(
             BigDecimal valorMinimo, BigDecimal valorMaximo, Pageable pageable) {
 
-        return receitaRepository.findByValorBetween(valorMinimo, valorMaximo, pageable)
+        return receitaRepository.findByValorBetweenAndUsuarioId(valorMinimo, valorMaximo, buscarUsuarioAutenticado().getId(), pageable)
                 .map(this::converterParaDTO);
     }
 
@@ -81,8 +81,8 @@ public class ReceitaService {
             BigDecimal valorMinimo, BigDecimal valorMaximo,
             LocalDate inicio, LocalDate fim, Pageable pageable) {
 
-        return receitaRepository.findByValorBetweenAndDataBetween(
-                        valorMinimo, valorMaximo, inicio, fim, pageable)
+        return receitaRepository.findByValorBetweenAndDataBetweenAndUsuarioId(
+                        valorMinimo, valorMaximo, inicio, fim, buscarUsuarioAutenticado().getId(), pageable)
                 .map(this::converterParaDTO);
     }
 
