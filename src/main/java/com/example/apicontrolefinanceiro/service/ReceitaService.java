@@ -45,11 +45,11 @@ public class ReceitaService {
     }
 
     public ReceitaResponseDTO buscarPorId(Long id) {
-        return converterParaDTO(buscarEntidadePorId(id));
+        return converterParaDTO(buscarEntidadePorId(id, buscarUsuarioAutenticado().getId()));
     }
 
     public ReceitaResponseDTO atualizar(Long id, ReceitaRequestDTO novosDados) {
-        Receita receita = buscarEntidadePorId(id);
+        Receita receita = buscarEntidadePorId(id, buscarUsuarioAutenticado().getId());
 
         receita.setDescricao(novosDados.getDescricao());
         receita.setData(novosDados.getData());
@@ -59,7 +59,7 @@ public class ReceitaService {
     }
 
     public void excluirPorId(Long id) {
-        buscarEntidadePorId(id);
+        buscarEntidadePorId(id, buscarUsuarioAutenticado().getId());
         receitaRepository.deleteById(id);
     }
 
@@ -90,8 +90,8 @@ public class ReceitaService {
         return receitaRepository.somarReceitasPorPeriodo(inicio, fim);
     }
 
-    private Receita buscarEntidadePorId(Long id) {
-        return receitaRepository.findById(id)
+    private Receita buscarEntidadePorId(Long id, Long usuarioId) {
+        return receitaRepository.findByIdAndUsuarioId(id, usuarioId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Receita não encontrada"));
     }
