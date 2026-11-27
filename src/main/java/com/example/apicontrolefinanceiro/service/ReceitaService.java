@@ -40,7 +40,7 @@ public class ReceitaService {
     }
 
     public Page<ReceitaResponseDTO> listar(Pageable pageable) {
-        return receitaRepository.findAll(pageable)
+        return receitaRepository.findByUsuarioId(buscarUsuarioAutenticado().getId(), pageable)
                 .map(this::converterParaDTO);
     }
 
