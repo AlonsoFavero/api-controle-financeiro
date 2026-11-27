@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Optional;
 
 public interface ReceitaRepository extends JpaRepository<Receita, Long> {
 
@@ -22,6 +23,7 @@ public interface ReceitaRepository extends JpaRepository<Receita, Long> {
             Long usuarioId,
             Pageable pageable
     );
+    Optional<Receita> findByIdAndUsuarioId(Long id, Long usuarioId);
 
     @Query("SELECT COALESCE(SUM(r.valor), 0) FROM Receita r WHERE r.data BETWEEN :inicio AND :fim")
     BigDecimal somarReceitasPorPeriodo(
