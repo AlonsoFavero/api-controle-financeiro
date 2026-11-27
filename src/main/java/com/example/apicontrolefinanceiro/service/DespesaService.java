@@ -6,11 +6,14 @@ import com.example.apicontrolefinanceiro.dto.DespesaRequestDTO;
 import com.example.apicontrolefinanceiro.dto.DespesaResponseDTO;
 import com.example.apicontrolefinanceiro.model.Categoria;
 import com.example.apicontrolefinanceiro.model.Despesa;
+import com.example.apicontrolefinanceiro.model.Usuario;
 import com.example.apicontrolefinanceiro.repository.CategoriaRepository;
 import com.example.apicontrolefinanceiro.repository.DespesaRepository;
+import com.example.apicontrolefinanceiro.repository.UsuarioRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -21,11 +24,14 @@ import java.util.List;
 @Service
 public class DespesaService {
 
+    private final UsuarioRepository usuarioRepository;
     private final DespesaRepository despesaRepository;
     private final CategoriaRepository categoriaRepository;
 
     public DespesaService(DespesaRepository despesaRepository,
-                          CategoriaRepository categoriaRepository) {
+                          CategoriaRepository categoriaRepository,
+                          UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
         this.despesaRepository = despesaRepository;
         this.categoriaRepository = categoriaRepository;
     }
@@ -51,6 +57,7 @@ public class DespesaService {
         despesa.setValor(dados.getValor());
         despesa.setData(dados.getData());
         despesa.setCategoria(buscarCategoria(dados.getCategoriaId()));
+        despesa.setUsuario(buscarUsuarioAutenticado());
 
         return converterParaDTO(despesaRepository.save(despesa));
     }
@@ -126,6 +133,15 @@ public class DespesaService {
         return categoriaRepository.findById(categoriaId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "categoria não encontrada"));
+    }
+
+    private Usuario buscarUsuarioAutenticado(){
+
+       String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        return usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "email não encontrado"));
     }
 
     private DespesaResponseDTO converterParaDTO(Despesa despesa) {
