@@ -38,8 +38,20 @@ public class Despesa {
     @Schema(description = "Categoria associada à despesa")
     private Categoria categoria;
 
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+   private Usuario usuario ;
+
     public Despesa(){
 
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public Long getId() {
