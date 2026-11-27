@@ -2,10 +2,7 @@
 package com.example.apicontrolefinanceiro.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -34,6 +31,10 @@ public class Receita {
     @Schema(description = "Data em que a receita foi recebida", example = "2026-11-19")
     private LocalDate data;
 
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
     public Receita() {
 
     }
@@ -43,6 +44,14 @@ public class Receita {
         this.descricao = descricao;
         this.valor = valor;
         this.data = data;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public Long getId() {
