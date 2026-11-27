@@ -14,8 +14,8 @@ import java.util.Optional;
 public interface ReceitaRepository extends JpaRepository<Receita, Long> {
 
     Page<Receita> findByDataBetween(LocalDate inicio, LocalDate fim, Pageable pageable);
-    Page<Receita> findByValorBetween(BigDecimal valorMinimo, BigDecimal valorMaximo, Pageable pageable);
-    Page<Receita> findByValorBetweenAndDataBetween(BigDecimal valorMinimo, BigDecimal valorMaximo, LocalDate inicio, LocalDate fim, Pageable pageable);
+    Page<Receita> findByValorBetweenAndUsuarioId(BigDecimal valorMinimo, BigDecimal valorMaximo, Long usuarioId, Pageable pageable);
+    Page<Receita> findByValorBetweenAndDataBetweenAndUsuarioId(BigDecimal valorMinimo, BigDecimal valorMaximo, LocalDate inicio, LocalDate fim,Long usuarioId, Pageable pageable);
     Page<Receita> findByUsuarioId(Long usuarioId, Pageable pageable);
     Page<Receita> findByDataBetweenAndUsuarioId(
             LocalDate inicio,
